@@ -1,0 +1,215 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    
+}
+
+.field label,
+.field input,
+.field textarea,
+.submitButton,
+h2,
+.note {
+    font-family: 'Roboto', sans-serif;
+    font-size:18px;
+}
+
+.container {
+    display: flex;
+    flex-direction: row;
+    min-height: 100vh;
+    padding-top: 80px;
+    background-color: #f9f9f9;
+}
+
+.content {
+    display: flex;
+}
+
+.adminPanel {
+    position: fixed;
+    top: 80px;
+    left: 80px;
+    width: 180px;
+    height: auto;
+    background-color: #f9f9f9;
+    border-right: 1.5px solid #e0e0e0;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    padding: 1.5rem 1rem;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    overflow-y: auto;
+}
+
+.mainContent {
+    margin-left: 340px;
+    width: 1000px;
+    border-radius: 10px;
+    padding: 20px;
+    
+}
+
+.mainContent h1 {
+    margin-top: 15px;
+    font-size: 32px;
+    margin-bottom: 2rem;
+    
+}
+
+.basicInfo,
+.saleInfo {
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #fcfcfc !important;
+}
+
+h2 {
+    margin-top: 0px;
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.note {
+    font-size: 12px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    line-height: 1.5;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.field label {
+    font-weight: bold;
+}
+
+.field input,
+.field textarea {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+    width: 100%;
+}
+
+.field textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+.submitButton {
+    padding: 10px 20px;
+    background-color: #B4E907;
+    color: #000;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.basicInfo,
+.saleInfo {
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+.basicInfo h2,
+.saleInfo h2 {
+    margin-bottom: 15px;
+}
+
+.featureRow {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.featureRow textarea {
+    min-height: 80px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    width: 100%;
+    resize: vertical;
+    margin:5px;
+}
+
+.imageUploadContainer {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.imageUploadBox {
+    width: 100px;
+    height: 100px;
+    border: 2px dashed #ddd;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.imageUploadBox::before {
+    content: "";
+    width: 40px;
+    height: 40px;
+    background-image: url("../assets/icons/addimage.svg");
+    background-size: cover;
+    background-position: center;
+    position: absolute;
+    pointer-events: none;
+}
+
+.imageUploadBox input {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.imageUploadBox img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: relative;
+    z-index: 1;
+}
+
+.imageUploadBox img+ ::before {
+    display: none;
+    /* Ẩn icon khi có ảnh */
+}
+
+.removeButton {
+    background: none;
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    color: crimson;
+    border: none;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 2;
+}

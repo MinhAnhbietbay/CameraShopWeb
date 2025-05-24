@@ -1,0 +1,159 @@
+.footer {
+  width: 100%;
+}
+
+/* Header styles */
+.header {
+  background-color: #f0f0f0;
+  width: 100%;
+}
+ 
+
+.headerTitle {
+  color: #000000;
+  text-transform: uppercase;
+  line-height: 112px;
+  text-align: center;
+  padding-top: 36px;
+  padding-bottom: 36px;
+  font-family: 'Roboto', sans-serif;
+  font-style:normal;
+  font-size: 96px;
+  font-weight: 900;
+}
+
+/* Content container styles */
+.contentContainer {
+  background-color: #102b26;
+  max-width: 100%;
+  padding: 66px 80px;
+}
+
+
+/* Top section layout */
+.topSection {
+  display: flex;
+  justify-content: space-between;
+}
+
+
+/* Subscription section styles */
+.subscriptionContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.brandContainer {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+}
+
+.logo {
+  width: 63.14px;
+  height: 63.14px;
+}
+
+.brandName {
+  color: #fff;
+  font-size: 48.68px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.logoContainer {
+  display : flex;
+  align-items: center;
+  gap : 8px;
+}
+
+.subscriptionText {
+  color: #fff;
+  max-width: 411px;
+  font-size: 21.88px;
+  margin: 0;
+}
+
+.emailForm {
+  background-color: transparent;
+  border: 1px solid #b3b3b3;
+  border-radius: 10px;
+  display: flex; /*mặc định sắp xếp theo chiều ngang*/
+  align-items: center;
+  width: 379px;
+  padding: 15px 10px;
+}
+
+
+.emailInput {
+  color: rgba(255, 255, 255); /* độ trong suốt 0.5-50%*/
+  border: none;
+  outline: none;
+  background-color: transparent; /* nền trong suốt*/
+  flex: 1; /*co giãn theo flex*/
+  font-size: 17.5px;
+}
+
+.submitButton {
+  cursor: pointer;
+  background-color: #fff;
+  border: none;
+  border-radius: 9999px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+}
+
+/* Navigation section styles */
+.navigationContainer {
+  display: flex;
+  gap: 50px; /*khoảng cách giữa các phần tử con*/
+}
+
+
+.navColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+}
+
+.navTitle {
+  color: #fff;
+  font-size: 22px;
+  font-weight: 500;
+  margin: 0;
+}
+
+.navList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+}
+
+.navLink {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 18px;
+  text-decoration: none;
+}
+
+/* Divider and copyright styles */
+.divider {
+  background-color:rgba(255, 255, 255, 0.5);;
+  height: 1px;
+  border: none;
+  margin-top: 40px;
+  margin-bottom: 40px;
+}
+
+.copyright {
+  color: rgba(217, 217, 217, 0.5);
+  font-size: 18px;
+  margin: 0;
+}

@@ -1,0 +1,250 @@
+.header {
+  background-color: #f0f0f0;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 45px;
+  display: flex;
+  overflow: visible;
+}
+
+.div {
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: start;
+  gap: 20px;
+  width: 100%;
+  max-width: 1278px;
+  margin-top: 25px;
+  display: flex;
+}
+
+.annoucmentBar {
+  color: #fff;
+  background-color: #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-self: stretch;
+  gap: 20px;
+  min-height: 45px;
+  padding: 5px 250px;
+  font-family: 'Roboto', sans-serif;
+  font-size: 18px;
+  font-weight: 300;
+}
+
+.logoContainer {
+  display : flex;
+  align-items: center;
+  gap : 8px;
+}
+
+.logo {
+    width: 24px;
+    height: 24px;
+    filter: brightness(0);
+}
+  
+.brandName {
+    color: #000;
+    font-size: 27.3px;
+    font-weight: 600;
+    margin: 0;
+}
+  
+
+.menu {
+  display: flex;
+  gap: 20px;
+  position: relative;
+}
+
+.menuItem {
+  position: relative;
+}
+
+.menuBtn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  white-space: nowrap;
+  color: #000;
+  transition: color 0.3s ease;
+}
+
+.menuBtn:focus {
+  outline: none;
+}
+
+.menuBtn:hover {
+  color: #b4e907;
+}
+
+.arrow {
+  margin-left: 5px;
+  transition: transform 0.3s ease;
+}
+
+.arrowUp {
+  transform: rotate(180deg);
+}
+
+/* Dropdown menu */
+.dropdownList  {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: white;
+  border: 1px solid #ccc;
+  list-style: none;
+  padding: 10px;
+  margin: 0;
+  z-index: 999;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.dropdownItem .dropdownList {
+  position: absolute;
+  top: 0;
+  left: 100%;
+  background-color: white;
+  border: 1px solid #ccc;
+  list-style: none;
+  padding: 10px;
+  margin: 0;
+  z-index: 999;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.dropdownItem .dropdownItem .dropdownList {
+  position: absolute;
+  top: 0; 
+  left: 100%; 
+  background-color: white;
+  border: 1px solid #ccc;
+  list-style: none;
+  padding: 10px;
+  margin: 0;
+  z-index: 999;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.dropdownItem a {
+  text-decoration: none;
+  color: black;
+  font-size: 14px;
+  transition: color 0.3s ease;
+}
+
+
+/* Submenu styling */
+.submenu {
+  position: absolute;
+  top: 0;
+  left: 100%;
+  background: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  z-index: 999;
+}
+
+.menuItem:hover > .submenu {
+  display: flex;
+}
+
+/* Icon group */
+.groupHeader {
+  display: flex;
+  align-items: center;
+  gap: 17px;
+}
+
+.groupHeader img {
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+}
+
+/* Divider line */
+.line {
+  border: 2px solid #000;
+  width: 1278px;
+  max-width: 100%;
+  margin-top: 21px;
+}
+.searchInput {
+  padding: 5px 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-left: 10px;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.userMenu {
+  position: relative;
+}
+
+.usermenuBtn{
+  border: 2px solid black;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  font-size: 16px;
+  color: #000;
+  height: 20px;
+  transition: color 0.3s ease;
+}
+
+.usermenuBtn:focus,
+.usermenuBtn:active {
+  outline: none; 
+  border: none; 
+}
+
+.userdropdownList {
+  position: absolute;
+  top: 100%;
+  right: -100%;
+  background: white;
+  list-style: none;
+  padding: 10px 0;
+  border-radius: 12px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  z-index: 10;
+  min-width: 160px;
+}
+
+.userdropdownItem {
+  padding: 12px 12px;
+  font-size: 16px;
+  color: black;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.userdropdownItem:not(:last-child) {
+  border-bottom: 1px solid #e0e0e0; /* Dòng kẻ phân cách */
+}
+
+.userdropdownItem:hover {
+  background-color: #f8f8f8;
+  border-radius: 12px;
+}
+
+

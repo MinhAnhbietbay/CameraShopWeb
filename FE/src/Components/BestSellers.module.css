@@ -1,0 +1,54 @@
+.bestSellersSection {
+  padding: 30px;
+  border-radius: 10px;
+}
+
+.bestSellersTitle {
+  font-size: 34.18px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.bestSellersWrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.productGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.productCard {
+  flex: shrink;
+  background-color: #fff;
+  border-radius: 20px;
+  width: 280px;
+  padding: 25px;
+  box-shadow: 0 2px 20px 5px #0000001a;
+}
+
+.productName {
+  font-size: 18px;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.productPrice {
+  color: #32cd32;
+  margin-top: 10px;
+  margin-bottom: 25px;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.productImage {
+  width: 250px;
+  height: 250px;
+  margin: 0 auto;
+  display: block;
+  border-radius: 10px;
+}
+

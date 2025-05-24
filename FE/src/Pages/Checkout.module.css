@@ -1,0 +1,158 @@
+.checkoutContainer {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.checkoutContainer h2{
+    font-size: 34.18px;
+    margin-top: 0px;
+}
+.checkoutTitle {
+    font-size: 32px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.deliveryAddress {
+    margin-bottom: 30px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+}
+
+.deliveryAddress h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.deliveryAddress p {
+    margin: 5px 0;
+}
+
+.changeAddressLink {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.changeAddressLink:hover {
+    text-decoration: underline;
+}
+
+.productsOrdered {
+    margin-bottom: 30px;
+}
+
+.productsOrdered h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.productList {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.productItem {
+    display: grid;
+    grid-template-columns: 5fr 3fr 1fr 0.01fr;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px;
+    background-color: #fff;
+    border-radius: 10px;
+}
+
+.productDetails {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.productImage {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.productName {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.productPrice {
+    font-size: 14px;
+    color: #28a745;
+    font-weight: bold;
+}
+
+.productQuantity {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.productTotalPrice {
+    font-size: 16px;
+    font-weight: bold;
+    color: #28a745;
+}
+
+.orderSummary {
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+}
+
+.orderSummary h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.summaryDetails {
+    margin-bottom: 20px;
+}
+
+.summaryItem {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.orderTotalLabel {
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.orderTotalAmount {
+    font-weight: bold;
+    color: #000;
+    font-size: 20px;
+}
+
+.summaryTotal {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 2px solid #eee;
+}
+
+.placeOrderButton {
+    display: block;
+    width: 100%;
+    padding: 10px 20px;
+    background-color: #B4E907;
+    color: #000;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s ease;
+}

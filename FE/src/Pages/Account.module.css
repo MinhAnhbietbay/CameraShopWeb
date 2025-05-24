@@ -1,0 +1,70 @@
+.container {
+    background-color: #f0f0f0;
+    max-width: none;
+    min-height: 100vh;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 1px 80px;
+    font-family: Roboto, sans-serif;
+}
+.sidebarTitle {
+    margin-top: -20px;
+    margin-left: 0px;
+    font-size: 27px;
+}
+
+.dashboardContent {
+    margin-top: -300px;
+    margin-left: 260px;
+}
+
+.dashboardTitle {
+    margin-bottom: 25px;
+    font-size: 34px;
+    font-weight: 700;
+}
+
+.dashboardDescription {
+    margin-bottom: 47px;
+    font-size: 17.5px;
+    line-height: 25px;
+}
+
+.infoContainer {
+    background-color: #fff;
+    border-radius: 20px;
+    padding: 20px;
+}
+
+
+.infoSection {
+    border-bottom: 5px solid #102b26;
+    margin-bottom: 37px;
+    padding-bottom: 37px;
+}
+
+.sectionHeader {
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 23px;
+    display: flex;
+}
+
+.sectionTitle {
+    font-size: 28px;
+}
+
+.editIcon {
+    width: 25px;
+    height: 25px;
+}
+
+.sectionContent {
+    font-size: 17.5px;
+    line-height: 25px;
+}
+
+.link {
+    color: #32ade6;
+    text-decoration: underline;
+}

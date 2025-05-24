@@ -1,0 +1,67 @@
+.pageContainer {
+  padding: 20px;
+  margin-left: 80px;
+  margin-top: -40px;
+}
+
+.breadcrumb {
+  margin-bottom: 20px;
+}
+
+.breadcrumbLink {
+  color: #000;
+  text-decoration: none;
+}
+
+.breadcrumb span {
+  margin: 0 5px;
+}
+
+.pageTitle {
+  font-size: 24px;
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+
+.contentLayout {
+  display: flex;
+  gap: 20px;
+}
+
+.sidebar {
+  width: 250px;
+}
+
+.mainContent {
+  flex-grow: 1;
+}
+
+.loadMoreContainer {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.loadMoreButton {
+  background-color: #aaff00;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  margin: 0 auto;
+}
+
+.buttonText {
+  margin-right: 10px;
+}
+
+.buttonIcon {
+  height: 1em;
+}
+
+.text {
+  margin-top: 20px;
+  color: #555;
+  font-size: 14px;
+} 

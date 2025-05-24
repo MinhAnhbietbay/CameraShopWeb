@@ -1,0 +1,174 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+}
+
+.mainLayout {
+  display: flex;
+  gap: 20px;
+}
+
+.sidebarContainer {
+  margin-top: -80px;
+  margin-left: 80px;
+  flex: 1;
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.sidebarTitle {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.orderContainer {
+  margin-left: -130px;
+  margin-top: -20px;
+  margin-right: 80px;
+  flex: 3;
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.orderTitle {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.orderTabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.tabButton {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #fff;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  text-align: center;
+  transition: background-color 0.3s ease;
+}
+
+.tabButton:hover {
+  background-color: #f0f0f0;
+}
+
+.details {
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 30px;
+}
+
+.productsOrdered {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.productRow {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  margin-bottom: 15px;
+}
+
+.productInfo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 2;
+}
+
+.productImage {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.productName {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.productPrice,
+.productQuantity,
+.productTotalPrice {
+  flex: 1;
+  text-align: center;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.productPrice {
+  color: #28a745;
+}
+
+.summaryContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-top: 1px solid #ddd;
+  margin-top: 20px;
+}
+
+.orderTotal h4 {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.totalPrice {
+  font-size: 24px;
+  font-weight: bold;
+  color: #28a745;
+}
+
+/* Trạng thái đơn hàng */
+.all {
+  border-radius: 20px;
+
+}
+.completed {
+  background-color: #AEEEEE;
+  color: #00B69B;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.processing {
+  background-color: #C5B3FF;
+  color: #6226EF;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.canceled {
+  background-color: #FFB3B3;
+  color: #FF0000;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+}

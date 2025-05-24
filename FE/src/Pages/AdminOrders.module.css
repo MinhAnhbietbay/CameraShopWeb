@@ -1,0 +1,156 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    padding-top: 80px;
+    background-color: #f9f9f9;
+}
+
+.content {
+    display: flex;
+    flex: 1;
+}
+
+.content>div:first-child {
+    flex: 1;
+    max-width: 180px;
+    min-width: 180px;
+    margin-left: 80px;
+}
+
+.tabSection, .tableSection {
+    flex: 3;
+    border-radius: 5px;
+    padding: 20px;
+    margin-left: 340px !important;
+    max-width: 1000px; 
+}
+
+.title {
+    margin-top:20px;
+    font-size: 32px;
+    font-weight: bold;
+    margin-bottom: 2rem;
+}
+
+.tableContainer {
+    margin-left: 0;
+    width: 100%;
+    background-color: #fff;
+    border-radius: 5px;
+    min-width: 700px;
+    overflow-x: auto;
+}
+
+.tableHeader>div,
+.row>div {
+    text-align: center;
+}
+
+.tableHeader {
+    display: grid;
+    grid-template-columns: 10% 20% 30% 15% 15% 10%;
+    background-color: #f5f5f5;
+    font-weight: bold;
+    padding: 10px 20px;
+    border-bottom: 2px solid #ddd;
+}
+
+.row {
+    display: grid;
+    grid-template-columns: 10% 20% 30% 15% 15% 10%;
+    padding: 10px 20px;
+    border-bottom: 1px solid #ddd;
+    align-items: center;
+}
+
+.viewOrder {
+    text-align: center;
+}
+
+.viewLink {
+    color: #000;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.viewLink:hover {
+    text-decoration: underline;
+}
+
+.statusBadge {
+    width: 90px;
+    display: inline-flex;
+    align-items: center;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #fff;
+    cursor: pointer;
+    display: inline-block;
+    text-align: center;
+    gap: 5px;
+}
+
+.arrowIcon {
+    width: 12px;
+    height: 12px;
+    margin-left: 5px;
+}
+
+.statusSelect {
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #fff;
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+    width: 110px;
+  }
+
+.statusBadge:hover {
+    opacity: 0.8;
+}
+
+.completed {
+    background-color: #AEEEEE;
+    color: #00B69B
+}
+
+.processing {
+    background-color: #C5B3FF;
+    color: #6226EF;
+}
+
+.canceled {
+    background-color: #FFB3B3;
+    color: #FF0000;
+}
+
+.statusSelect {
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #fff;
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+    width: 110px;
+    text-align: center;
+}
+
+.statusSelect:focus {
+    outline: none;
+    border-color: #007bff;
+}
+
+.tableSection {
+    flex: 3;
+    border-radius: 5px;
+    padding: 20px;
+    margin-left: 0;
+    min-width: 700px;
+    overflow-x: auto;
+}

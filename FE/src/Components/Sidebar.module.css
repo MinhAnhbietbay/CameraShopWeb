@@ -1,0 +1,31 @@
+.sidebarContainer {
+    background-color: #fff;
+    border-radius: 5px;
+    width: 220px;
+    padding: 10px;
+}
+
+.sidebarHeader {
+    color: #00000080;
+    margin-top: 1px;
+    font-size: 18px;
+}
+
+.navigationList {
+    flex-direction: column;
+    display: flex;
+}
+
+.navItem {
+    border: 1px solid #00000080;
+    border-radius: 5px;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    display: flex;
+    color: black;
+}
+
+.navItemText {
+    font-size: 14px;
+}

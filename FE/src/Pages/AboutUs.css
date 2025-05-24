@@ -1,0 +1,143 @@
+.hero-container {
+  background: linear-gradient(#0003 0% 100%), #102b26;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding: 30px 20px;
+  display: flex;
+  box-sizing: border-box;
+}
+
+.hero-content {
+  width: 100%;
+  max-width: 1084px;
+}
+
+.hero-title {
+  color: #fff;
+  background: #d3d3d3;
+  width: 100%;
+  height: 450px;
+  padding-bottom: 28px;
+  font-family: Roboto, sans-serif;
+  font-size: 60px;
+  font-weight: 900;
+}
+
+.welcome-section {
+  color: #fff;
+  text-align: center;
+  flex-direction: column;
+  margin-top: 22px;
+  font-family: Roboto, sans-serif;
+  font-size: 30px;
+  display: flex;
+}
+
+.welcome-heading {
+  font-size: 34px;
+  font-weight: 700;
+}
+
+.brand-name {
+  color: #b4e907;
+  font-size: 34px;
+  font-weight: 700;
+}
+
+.welcome-subheading {
+  margin: 10px 0;
+  font-size: 30px;
+  font-weight: 700;
+}
+
+.welcome-text {
+  margin: 5px 0;
+  font-weight: 400;
+}
+
+.brand-emphasis {
+  font-weight: 700;
+}
+
+/* Feature Section Styles */
+.feature-section {
+  padding: 0 135px;
+  display: flex;
+  box-sizing: border-box;
+  justify-content: space-between;
+}
+
+.feature-image {
+  width: 771px;
+  height: 433px;
+  margin: 0 auto;
+}
+
+.img {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+}
+
+.feature-content {
+  text-align: center;
+  width: 372px;
+  padding: 119px 0 0 129px;
+}
+
+
+.feature-title {
+  color: #000;
+  margin-bottom: 20px;
+  font-family: Roboto, sans-serif;
+  font-size: 34px;
+  font-weight: 700;
+}
+
+.feature-description {
+  color: #000;
+  font-family: Roboto, sans-serif;
+  font-size: 18px;
+  font-weight: 400;
+}
+
+/* Equipment Section Styles */
+.equipment-section {
+  background: linear-gradient(#0003 0% 100%), #102b26;
+  padding: 48px 20px;
+}
+
+.equipment-content {
+  text-align: center;
+  color: #fff;
+  max-width: 575px;
+  margin: 0 auto;
+  font-family: Roboto, sans-serif;
+}
+
+.equipment-title {
+  margin-bottom: 20px;
+  font-size: 34px;
+  font-weight: 700;
+}
+
+.equipment-description {
+  font-size: 18px;
+  font-weight: 400;
+}
+
+.equipment-gallery {
+  justify-content: center;
+  gap: 50px;
+  margin-top: 50px;
+  display: flex;
+}
+
+.gallery-item {
+  border-radius: 20px;
+  width: 300px;
+  height: 400px;
+  overflow: hidden;
+  margin: 0;
+}

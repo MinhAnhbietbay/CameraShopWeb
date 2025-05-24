@@ -1,0 +1,132 @@
+.registerContainer {
+    background-color: #fff;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 320px;
+    height: auto;
+    min-height: 600px;
+    padding: 30px 25px;
+    margin-left: 520px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.text {
+    text-align: center;
+    margin-top: 50px;
+    margin-bottom: 30px;
+    color: #333;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.inputGroup {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-bottom: 15px;
+    position: relative;
+}
+
+.inputField {
+    width: 100%;
+    padding: 12px 0;
+    font-size: 16px;
+    border: none;
+    border-bottom: 2px solid #ccc;
+    background: none;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+.inputField:focus {
+    border-bottom: 2px solid #007bff;
+}
+
+.inputField::placeholder {
+    color: #aaa;
+    font-style: italic;
+}
+
+.togglePassword {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #666;
+  font-size: 14px;
+}
+
+.fieldError {
+  color: #dc3545;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+.registerButton {
+    width: 180px;
+    height: 45px;
+    background-color: #007bff;
+    border: none;
+    border-radius: 50px;
+    color: #fff;
+    font-size: 17px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: background-color 0.3s ease;
+}
+
+.registerButton:hover {
+    background-color: #0056b3;
+}
+
+.loginSection {
+    text-align: center;
+    background: linear-gradient(#0003 0% 100%), #102b26;
+    border-radius: 0 0 20px 20px;
+    width: 100%;
+    padding: 27px;
+    margin-top: 20px;
+}
+
+.loginText {
+    color: #fff;
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.loginButton {
+    width: 220px;
+    height: 45px;
+    background-color: #007bff;
+    border: none;
+    border-radius: 50px;
+    color: #fff;
+    font-size: 17px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.loginButton:hover {
+    background-color: #0056b3;
+}
+
+.error {
+    color: #dc3545;
+    font-size: 14px;
+    margin-bottom: 15px;
+    text-align: center;
+    width: 100%;
+    padding: 8px;
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    border-radius: 4px;
+}

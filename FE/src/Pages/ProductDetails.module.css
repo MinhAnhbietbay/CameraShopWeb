@@ -1,0 +1,275 @@
+.productDetails {
+  max-width: 1200px;
+  padding: 0 80px 80px;
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  margin-bottom: 30px;
+  box-shadow: none !important;
+}
+
+.mainImageContainer {
+  flex: 0 0 auto;
+}
+
+.img {
+  margin-top: 20px;
+  width: 522px;
+  height: auto;
+  border-radius: 8px;
+}
+
+.productInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.productName {
+  font-size: 34.18px;
+  font-weight: bold;
+  margin-top: 20px;
+}
+
+.additionalImages {
+  display: flex;
+  flex-direction: column; /* Hiển thị theo chiều dọc */
+  gap: 8px;
+}
+
+.thumbnail {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.thumbnail:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+h1 {
+  font-size: 28px;
+  margin: 0;
+  color: #222;
+}
+
+.price {
+  font-size: 24px;
+  color: #28a745;
+  font-weight: bold;
+  margin: 10px 0;
+}
+
+/* Phần mô tả sản phẩm */
+.description {
+  margin-top: 10px;
+}
+
+.description div {
+  font-size: 16px;
+  line-height: 1.5;
+  font-weight: 400;
+}
+
+.additionalInfo {
+  margin-top: 40px;
+  margin-left: 20px;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.additionalInfo p {
+  margin: 5px 0;
+}
+
+.contactLink {
+  color: #000;
+  font-weight: bold;
+}
+
+.contactLink:hover {
+  text-decoration: underline;
+}
+
+/* Phần tính năng sản phẩm */
+.features {
+  margin-bottom: 30px;
+}
+
+.features h2 {
+
+  font-size: 28px;
+  margin-bottom: 20px;;
+}
+
+.featureGrid {
+  display: flex; 
+  flex-wrap: nowrap; 
+  gap: 20px; 
+  justify-content: space-between; 
+}
+
+.featureItem {
+  flex: 1 1 calc(33.333% - 20px); 
+  background-color: #102B26;
+  color: #fff;
+  border-radius: 20px;
+  padding: 15px;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  height:750px;
+  width:490px;
+}
+
+.featureItem:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.featureImage {
+  width: 414px;
+  height: 516px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.featureItem h3 {
+  font-size: 24px;
+  color: #fff;
+}
+
+.featureItem p {
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+/* Phần thông số kỹ thuật */
+.specifications {
+  margin-bottom: 30px;
+}
+
+.specifications h2 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.img6 {
+  width: 50px;
+  height: auto;
+  margin: 10px 0;
+}
+
+.div11 {
+  border: 0;
+  height: 1px;
+  background: #ddd;
+  margin: 20px 0;
+}
+
+/* Phần thông báo khi không tìm thấy sản phẩm */
+.productNotFound {
+  text-align: center;
+  margin-top: 50px;
+}
+
+.productNotFound h1 {
+  font-size: 28px;
+  color: #d9534f;
+}
+
+.productNotFound p {
+  font-size: 16px;
+  color: #555;
+}
+
+/* Phần ảnh phụ */
+.additionalImages {
+  margin-top: 20px;
+}
+
+.additionalImages h2 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.imageGallery {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.thumbnail {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.thumbnail:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.highlight {
+  margin-top: 20px;
+  width: 1330px;
+  padding: 15px;
+  background-color: #fff;
+  border-radius: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.highlight h2 {
+  font-size: 24px;
+  margin-bottom: 10px;
+  color: #000;
+}
+
+.highlight p {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #000;
+}
+
+.specifications {
+  margin-top: 20px;
+  width: 1330px;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 20px;
+}
+
+.specifications h2 {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.specList {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.specList li {
+  margin-bottom: 10px;
+  font-size: 24px;
+  line-height: 1.6;
+  color: #555;
+}
+
+.specList li strong {
+  color: #000;
+}

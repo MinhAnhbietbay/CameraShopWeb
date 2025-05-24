@@ -1,0 +1,64 @@
+.adminPanel {
+    position: fixed;
+    top: 80px;
+    left: 80px;
+    width: 200px;
+    min-height: 300px;
+    max-height: 600px;
+    background-color: #f9f9f9;
+    border-right: 1.5px solid #e0e0e0;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    padding: 1.5rem 1rem;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.panelTitle {
+    margin-top: 0px;
+    font-size: 24px;
+    color: #000;
+    text-align: left;
+    margin-bottom: 1.5rem;
+}
+
+.navList {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+}
+
+.navItem {
+    display: flex;
+    align-items: center;
+    padding: 12px 10px;
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    cursor: pointer;
+    width: 180px;
+}
+
+.navItemHeader {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+}
+
+.link {
+    text-decoration: none;
+    color: #000;
+    font-size: 16px;
+    font-weight: bold;
+    flex: 1;
+}
+
+.link:hover {
+    text-decoration: underline;
+}

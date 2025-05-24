@@ -1,0 +1,112 @@
+.sidebar {
+    flex-direction: column;
+    gap: 20px;
+    width: 220px;
+    display: flex;
+}
+
+.sortingContainer {
+    background-color: #fff;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.sectionTitle {
+    color: #000 !important;
+    margin-bottom: 5px;
+    font-size: 18px;
+}
+
+.sortDropdown {
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 10px;
+    display: flex;
+    background: #f9f9f9;
+    height: 38px;
+    margin-top: 0;
+}
+
+.dropdownText {
+    font-size: 15px;
+    border: none;
+    background: transparent;
+    outline: none;
+    padding: 8px 0;
+    width: 140px;
+    color: #222;
+    font-weight: 500;
+    border-radius: 5px;
+    cursor: pointer;
+    appearance: none;
+}
+
+.sortDropdown select:focus {
+    background: #e6f0ff;
+}
+
+.sortDropdown select:hover {
+    background: #f0f0f0;
+}
+
+.sortDropdown img {
+    width: 18px;
+    height: 18px;
+    margin-left: 4px;
+    pointer-events: none;
+}
+
+.filterContainer {
+    background-color: #fff;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.filterOptions {
+    border-width: 1px;
+    border-color: #00000080;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.filterCategory {
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+.optionsList {
+    flex-direction: column;
+    gap: 10px;
+    display: flex;
+}
+
+.optionItem {
+    align-items: center;
+    gap: 8px;
+    display: flex;
+    cursor: pointer;
+}
+
+.radioSelected {
+    background-color: #090909;
+    border-width: 1px;
+    border-color: #000;
+    border-radius: 9999px;
+    width: 10px;
+    height: 10px;
+}
+
+.radioUnselected {
+    border-width: 1px;
+    border-color: #00000080;
+    border-radius: 9999px;
+    width: 10px;
+    height: 10px;
+}
+
+.optionText {
+    font-size: 14px;
+}

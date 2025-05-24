@@ -1,0 +1,76 @@
+.container {
+    background-color: #f0f0f0;
+    border-radius: 20px;
+    width: 100%;
+    max-width: 1440px;
+    padding: 7px 80px 10px;
+}
+
+.heading {
+    color: #000;
+    margin-bottom: 12px;
+    font-family: Roboto, sans-serif;
+    font-size: 34px;
+    font-weight: 700;
+}
+
+.contentWrapper {
+    background: linear-gradient(#0003 0% 100%), #102b26;
+    border-radius: 20px;
+    padding: 40px;
+    display: flex;
+    position: relative;
+}
+
+.description {
+    color: #fff;
+    margin-bottom: 31px;
+    font-family: Roboto, sans-serif;
+    font-size: 32px;
+}
+
+.bold {
+    margin-bottom: 10px;
+    font-weight: 700;
+}
+
+.regular {
+    font-weight: 400;
+}
+
+.highlight {
+    color: #b4e907;
+    font-weight: 700;
+}
+
+.ctaButton {
+    color: #000;
+    cursor: pointer;
+    background-color: #b4e907;
+    border: 1px solid #000;
+    border-radius: 100px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    width: fit-content;
+    padding: 10px 50px;
+    font-family: Roboto, sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    display: flex;
+}
+
+.arrowIcon {
+    width: 15px;
+    height: 19px;
+}
+
+.featureImage {
+    object-fit: cover;
+    width: 626px;
+    height: 396px;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
