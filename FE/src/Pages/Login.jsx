@@ -40,10 +40,19 @@ const Login = ({ setIsLoggedIn }) => {
     try {
       const response = await authApi.login(formData);
       if (response.data) {
-        localStorage.setItem('accessToken', response.data.result.accessToken);
-        localStorage.setItem('refreshToken', response.data.result.refreshToken);
+        const { accessToken, refreshToken, user } = response.data.result;
+        localStorage.setItem('accessToken', accessToken);
+        localStorage.setItem('refreshToken', refreshToken);
+        localStorage.setItem('user', JSON.stringify(user));
+        
         setIsLoggedIn(true);
-        navigate("/");
+        
+        // Điều hướng dựa trên role
+        if (user.role === 'admin') {
+          navigate("/admin");
+        } else {
+          navigate("/");
+        }
       }
     } catch (error) {
       if (error.errors) {

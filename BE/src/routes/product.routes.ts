@@ -44,7 +44,7 @@ productsRouter.get('/:product_id', wrapRequestHandler(getProductByIdController))
  *   description: string,
  *   image: File,
  *   category: string,
- *   maker: string,
+ *   brand: string,
  *   count_in_stock: number,
  *   createdAt: Date (auto-generated)
  * }

@@ -30,12 +30,22 @@ export const authApi = {
     logout: () => {
         localStorage.removeItem('accessToken');
         localStorage.removeItem('refreshToken');
+        localStorage.removeItem('user');
     },
 
     getCurrentUser: () => {
-        const accessToken = localStorage.getItem('accessToken');
-        if (accessToken) {
-            return true;
+        const user = localStorage.getItem('user');
+        if (user) {
+            return JSON.parse(user);
+        }
+        return null;
+    },
+
+    isAdmin: () => {
+        const user = localStorage.getItem('user');
+        if (user) {
+            const userData = JSON.parse(user);
+            return userData.role === 'admin';
         }
         return false;
     },
@@ -74,6 +84,7 @@ export const authApi = {
                     } catch (error) {
                         localStorage.removeItem('accessToken');
                         localStorage.removeItem('refreshToken');
+                        localStorage.removeItem('user');
                         window.location.href = '/login';
                         return Promise.reject(error);
                     }

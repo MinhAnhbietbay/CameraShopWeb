@@ -21,7 +21,7 @@ import AdminAddProduct from "./Pages/AdminAddProduct";
 import AdminOrders from "./Pages/AdminOrders";
 import AdminUsers from "./Pages/AdminUsers";
 
-import api from "./api";
+import { authApi } from "./services/authApi";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -34,27 +34,10 @@ function App() {
   };
 
   useEffect(() => {
-    const token = localStorage.getItem('accessToken');
-    if (token) {
-      api.get('/users/me')
-        .then(response => {
-          if (response.data && response.data.result) {
-            setUser(response.data.result.user);
-            setIsLoggedIn(true);
-          } else {
-            setIsLoggedIn(false);
-            setUser(null);
-            localStorage.removeItem('accessToken');
-            localStorage.removeItem('refreshToken');
-          }
-        })
-        .catch(error => {
-          console.error("Error fetching user data:", error);
-          setIsLoggedIn(false);
-          setUser(null);
-          localStorage.removeItem('accessToken');
-          localStorage.removeItem('refreshToken');
-        });
+    const userData = authApi.getCurrentUser();
+    if (userData) {
+      setUser(userData);
+      setIsLoggedIn(true);
     } else {
       setIsLoggedIn(false);
       setUser(null);
@@ -62,11 +45,14 @@ function App() {
   }, []);
 
   const AdminPrivateRoute = ({ element: Element, ...rest }) => {
-    return isLoggedIn && user && user.role === 'admin' ? (
-      <Element {...rest} />
-    ) : (
-      <Navigate to="/login" replace />
-    );
+    const userData = authApi.getCurrentUser();
+    if (!userData) {
+      return <Navigate to="/login" replace />;
+    }
+    if (userData.role !== 'admin') {
+      return <Navigate to="/" replace />;
+    }
+    return <Element {...rest} />;
   };
 
   return (
@@ -88,7 +74,7 @@ function App() {
             )
           }
         />
-        <Route path="/register" element={<Register />} />
+        <Route path="/register" element={<Register setIsLoggedIn={handleLoginSuccess} />} />
         <Route path="/cart" element={<ShoppingCart />} />
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/account/order" element={<MyOrder />} />

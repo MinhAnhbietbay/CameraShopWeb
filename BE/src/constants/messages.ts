@@ -66,8 +66,8 @@ export const PRODUCTS_MESSAGES = {
     CATEGORY_IS_REQUIRED: 'Category is required',
     CATEGORY_MUST_BE_STRING: 'Category must be a string',
     IS_ACTIVE_MUST_BE_BOOLEAN: 'Is active must be a boolean',
-    MAKER_IS_REQUIRED: 'Maker is required',
-    MAKER_MUST_BE_STRING: 'Maker must be a string'
+    BRAND_IS_REQUIRED: 'Brand is required',
+    BRAND_MUST_BE_STRING: 'Brand must be a string'
 } as const
 
 export const CART_MESSAGES = {

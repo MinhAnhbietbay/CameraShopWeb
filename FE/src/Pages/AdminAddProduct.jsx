@@ -1,60 +1,152 @@
 import React, { useState } from "react";
 import styles from "./AdminAddProduct.module.css";
 import AdminPanel from "../Components/AdminPanel";
+import axios from "axios";
 
 function AdminAddProduct() {
   const [formData, setFormData] = useState({
-    productName: "",
-    category: "",
-    description: "",
-    highlightsSummary: "",
-    highlights: ["", "", ""],
-    specifications: "",
+    name: "",
     price: "",
-    stock: "",
-    productImages: [null, null, null, null, null],
-    promotionImage: null,
-    featureImages: [null, null, null],
+    description: "",
+    category: "",
+    image: null,
+    count_in_stock: "",
+    sold: 0,
+    brand: "",
+    highlightsSummary: "",
+    features: [{ title: "", description: "", image: null }],
+    additionalImages: [null],
+    specifications: [{ key: "", value: "" }]
   });
+
+  const categories = ["Camera", "Lens", "Accessories", "Other"];
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+    if (name === "price" || name === "count_in_stock") {
+      // Ngăn chặn việc nhập số 0 đầu tiên
+      if (value === "0") {
+        return;
+      }
+      // Ngăn chặn việc nhập dấu - hoặc +
+      if (value.startsWith("-") || value.startsWith("+")) {
+        return;
+      }
+    }
     setFormData({ ...formData, [name]: value });
-  };
-
-  const handleHighlightChange = (index, value) => {
-    const updatedHighlights = [...formData.highlights];
-    updatedHighlights[index] = value;
-    setFormData({ ...formData, highlights: updatedHighlights });
   };
 
   const handleImageChange = (e, type, index) => {
     const file = e.target.files[0];
-    if (file) {
-      const updatedImages = [...formData[type]];
-      updatedImages[index] = file;
-      setFormData({ ...formData, [type]: updatedImages });
+    if (!file) return;
+    if (type === "image") {
+      setFormData({ ...formData, image: file });
+    } else if (type === "additionalImages") {
+      const newImages = [...formData.additionalImages];
+      newImages[index] = file;
+      setFormData({ ...formData, additionalImages: newImages });
+    } else if (type === "features") {
+      const newFeatures = [...formData.features];
+      newFeatures[index].image = file;
+      setFormData({ ...formData, features: newFeatures });
     }
   };
 
-  const handleRemoveImage = (type, index) => {
-    const updatedImages = [...formData[type]];
-    updatedImages[index] = null; // Xóa ảnh tại vị trí được chọn
-    setFormData({ ...formData, [type]: updatedImages });
+  const handleFeatureChange = (index, field, value) => {
+    const newFeatures = [...formData.features];
+    newFeatures[index] = { ...newFeatures[index], [field]: value };
+    setFormData({ ...formData, features: newFeatures });
   };
 
-  const handlePromotionImageChange = (file) => {
-    setFormData({ ...formData, promotionImage: file });
+  const handleSpecificationChange = (index, field, value) => {
+    const newSpecifications = [...formData.specifications];
+    newSpecifications[index] = { ...newSpecifications[index], [field]: value };
+    setFormData({ ...formData, specifications: newSpecifications });
   };
 
-  const handleRemovePromotionImage = () => {
-    setFormData({ ...formData, promotionImage: null }); // Xóa ảnh promo
+  const addFeature = () => {
+    setFormData({
+      ...formData,
+      features: [...formData.features, { title: "", description: "", image: null }]
+    });
   };
 
-  const handleSubmit = (e) => {
+  const removeFeature = (index) => {
+    const newFeatures = [...formData.features];
+    newFeatures.splice(index, 1);
+    setFormData({ ...formData, features: newFeatures });
+  };
+
+  const addAdditionalImage = () => {
+    setFormData({
+      ...formData,
+      additionalImages: [...formData.additionalImages, null]
+    });
+  };
+
+  const removeAdditionalImage = (index) => {
+    const newAdditionalImages = [...formData.additionalImages];
+    newAdditionalImages.splice(index, 1);
+    setFormData({ ...formData, additionalImages: newAdditionalImages });
+  };
+
+  const addSpecification = () => {
+    setFormData({
+      ...formData,
+      specifications: [...formData.specifications, { key: "", value: "" }]
+    });
+  };
+
+  const removeSpecification = (index) => {
+    const newSpecifications = [...formData.specifications];
+    newSpecifications.splice(index, 1);
+    setFormData({ ...formData, specifications: newSpecifications });
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
-    // Add logic to send data to the server
+    try {
+      const form = new FormData();
+      form.append("name", formData.name);
+      form.append("price", Number(formData.price));
+      form.append("description", formData.description);
+      form.append("category", formData.category);
+      form.append("brand", formData.brand);
+      form.append("count_in_stock", Number(formData.count_in_stock));
+      form.append("sold", Number(formData.sold));
+      form.append("highlightsSummary", formData.highlightsSummary);
+      if (formData.image) form.append("image", formData.image);
+      // Thêm các ảnh phụ
+      formData.additionalImages.forEach((img, idx) => {
+        if (img) form.append(`additionalImages`, img);
+      });
+      // Thêm features
+      formData.features.forEach((feature, idx) => {
+        form.append(`features[${idx}][title]`, feature.title);
+        form.append(`features[${idx}][description]`, feature.description);
+        if (feature.image) form.append(`features[${idx}][image]`, feature.image);
+      });
+      // Thêm specifications
+      formData.specifications.forEach((spec, idx) => {
+        form.append(`specifications[${idx}][key]`, spec.key);
+        form.append(`specifications[${idx}][value]`, spec.value);
+      });
+
+      const response = await axios.post("http://localhost:3000/products/add", form, {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      if (response.status !== 200 && response.status !== 201) {
+        throw new Error("Failed to add product");
+      }
+      alert("Sản phẩm đã được thêm thành công!");
+      // Có thể reset form hoặc chuyển hướng
+    } catch (error) {
+      console.error("Error adding product:", error);
+      alert("Có lỗi xảy ra khi thêm sản phẩm. Vui lòng thử lại.");
+    }
   };
 
   return (
@@ -71,87 +163,56 @@ function AdminAddProduct() {
             <section className={styles.basicInfo}>
               <h2>Basic Information</h2>
               <div className={styles.field}>
-                <label>Product Images*</label>
-                <div className={styles.imageUploadContainer}>
-                  {formData.productImages.map((image, index) => (
-                    <div key={index} className={styles.imageUploadBox}>
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={(e) => handleImageChange(e, "featureImages", index)}
-                      />
-                      {formData.featureImages && formData.featureImages[index] && (
-                        <>
-                          <img
-                            src={URL.createObjectURL(formData.featureImages[index])}
-                            alt={`Feature ${index + 1}`}
-                          />
-                          <button
-                            type="button"
-                            className={styles.removeButton}
-                            onClick={() => handleRemoveImage("featureImages", index)}
-                          >
-                            ✖
-                          </button>
-                        </>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </div>
-              <div className={styles.field}>
-                <label>Promotion Image*</label>
-                <p className={styles.note}>
-                  Upload 1:1 Image. Promotion Image will be used on the promotion page, search result page, daily discover, etc. Upload Promotion Image will inspire buyers to click on your product.
-                </p>
-                <div className={styles.imageUploadBox}>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={(e) => handlePromotionImageChange(e.target.files[0])}
-                    required={!formData.promotionImage} // Chỉ yêu cầu nếu chưa có ảnh
-                  />
-                  {formData.promotionImage && (
-                    <>
-                      <img
-                        src={URL.createObjectURL(formData.promotionImage)}
-                        alt="Promotion"
-                      />
-                      <button
-                        type="button"
-                        className={styles.removeButton}
-                        onClick={handleRemovePromotionImage}
-                      >
-                        ✖
-                      </button>
-                    </>
-                  )}
-                </div>
-              </div>
-              <div className={styles.field}>
-                <label>Product Name*</label>
+                <label>Product Name<span className={styles.required}>*</span></label>
                 <input
                   type="text"
-                  name="productName"
-                  value={formData.productName}
+                  name="name"
+                  value={formData.name}
                   onChange={handleInputChange}
                   placeholder="Enter product name"
                   required
                 />
               </div>
               <div className={styles.field}>
-                <label>Category*</label>
+                <label>Price<span className={styles.required}>*</span></label>
                 <input
-                  type="text"
-                  name="category"
-                  value={formData.category}
+                  type="number"
+                  name="price"
+                  value={formData.price}
                   onChange={handleInputChange}
-                  placeholder="Enter category"
+                  placeholder="Enter price"
+                  min="0"
+                  step="0.01"
                   required
                 />
               </div>
               <div className={styles.field}>
-                <label>Product Description*</label>
+                <label>Brand<span className={styles.required}>*</span></label>
+                <input
+                  type="text"
+                  name="brand"
+                  value={formData.brand}
+                  onChange={handleInputChange}
+                  placeholder="Enter brand"
+                  required
+                />
+              </div>
+              <div className={styles.field}>
+                <label>Category<span className={styles.required}>*</span></label>
+                <select
+                  name="category"
+                  value={formData.category}
+                  onChange={handleInputChange}
+                  required
+                >
+                  <option value="">Select a category</option>
+                  {categories.map((cat) => (
+                    <option key={cat} value={cat}>{cat}</option>
+                  ))}
+                </select>
+              </div>
+              <div className={styles.field}>
+                <label>Product Description<span className={styles.required}>*</span></label>
                 <textarea
                   name="description"
                   value={formData.description}
@@ -160,92 +221,94 @@ function AdminAddProduct() {
                   required
                 />
               </div>
-
               <div className={styles.field}>
-                <label>Product Feature Highlights*</label>
-
-                <div className={styles.field}>
-                  <textarea
-                    name="highlightsSummary"
-                    value={formData.highlightsSummary || ""}
-                    onChange={(e) =>
-                      setFormData({ ...formData, highlightsSummary: e.target.value })
-                    }
-                    placeholder="Enter highlights summary"
-                    required
-                  />
-                </div>
-
-                {formData.highlights.map((highlight, index) => (
-                  <div key={index} className={styles.featureRow}>
-                    <div className={styles.imageUploadBox}>
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={(e) =>
-                          handleImageChange("featureImages", index, e.target.files[0])
-                        }
-                      />
-                      {formData.featureImages && formData.featureImages[index] && (
-                        <>
-                          <img
-                            src={URL.createObjectURL(formData.featureImages[index])}
-                            alt={`Feature ${index + 1}`}
-                          />
-                          <button
-                            type="button"
-                            className={styles.removeButton}
-                            onClick={() => handleRemoveImage("featureImages", index)}
-                          >
-                            ✖
-                          </button>
-                        </>
-                      )}
-                    </div>
-                    <textarea
-                      type="text"
-                      value={highlight}
-                      onChange={(e) => handleHighlightChange(index, e.target.value)}
-                      placeholder={`Feature ${index + 1}`}
-                      required
+                <label>Product Feature Highlights<span className={styles.required}>*</span></label>
+                <textarea
+                  name="highlightsSummary"
+                  value={formData.highlightsSummary}
+                  onChange={handleInputChange}
+                  placeholder="Enter highlights summary"
+                  required
+                />
+              </div>
+              <div className={styles.field}>
+                <label>Main Image<span className={styles.required}>*</span></label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => handleImageChange(e, "image")}
+                  required
+                />
+              </div>
+              <div className={styles.field}>
+                <label>Additional Images</label>
+                {formData.additionalImages.map((image, index) => (
+                  <div key={index}>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => handleImageChange(e, "additionalImages", index)}
                     />
+                    <button type="button" onClick={() => removeAdditionalImage(index)}>Remove</button>
                   </div>
                 ))}
+                <button type="button" onClick={addAdditionalImage}>Add Image</button>
               </div>
-
               <div className={styles.field}>
-                <label>Specifications*</label>
-                <textarea
-                  name="specifications"
-                  value={formData.specifications}
-                  onChange={handleInputChange}
-                  placeholder="Enter specifications"
-                  required
-                />
+                <label>Features</label>
+                {formData.features.map((feature, index) => (
+                  <div key={index}>
+                    <input
+                      type="text"
+                      value={feature.title}
+                      onChange={(e) => handleFeatureChange(index, "title", e.target.value)}
+                      placeholder={`Feature ${index + 1} title`}
+                    />
+                    <textarea
+                      value={feature.description}
+                      onChange={(e) => handleFeatureChange(index, "description", e.target.value)}
+                      placeholder={`Feature ${index + 1} description`}
+                    />
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => handleImageChange(e, "features", index)}
+                    />
+                    <button type="button" onClick={() => removeFeature(index)}>Remove</button>
+                  </div>
+                ))}
+                <button type="button" onClick={addFeature}>Add Feature</button>
               </div>
-            </section>
-
-            <section className={styles.saleInfo}>
-              <h2>Sale Information</h2>
               <div className={styles.field}>
-                <label>Price*</label>
+                <label>Specifications</label>
+                {formData.specifications.map((spec, index) => (
+                  <div key={index}>
+                    <input
+                      type="text"
+                      value={spec.key}
+                      onChange={(e) => handleSpecificationChange(index, "key", e.target.value)}
+                      placeholder={`Specification ${index + 1} key`}
+                    />
+                    <input
+                      type="text"
+                      value={spec.value}
+                      onChange={(e) => handleSpecificationChange(index, "value", e.target.value)}
+                      placeholder={`Specification ${index + 1} value`}
+                    />
+                    <button type="button" onClick={() => removeSpecification(index)}>Remove</button>
+                  </div>
+                ))}
+                <button type="button" onClick={addSpecification}>Add Specification</button>
+              </div>
+              <div className={styles.field}>
+                <label>Count in Stock<span className={styles.required}>*</span></label>
                 <input
                   type="number"
-                  name="price"
-                  value={formData.price}
+                  name="count_in_stock"
+                  value={formData.count_in_stock}
                   onChange={handleInputChange}
-                  placeholder="Enter price"
-                  required
-                />
-              </div>
-              <div className={styles.field}>
-                <label>Stock*</label>
-                <input
-                  type="number"
-                  name="stock"
-                  value={formData.stock}
-                  onChange={handleInputChange}
-                  placeholder="Enter stock quantity"
+                  placeholder="Enter count in stock"
+                  min="0"
                   required
                 />
               </div>

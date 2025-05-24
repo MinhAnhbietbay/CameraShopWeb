@@ -16,10 +16,8 @@
 .table {
     margin-left: 360px;
     margin-top: 0;
-    margin-right: 40px;
-    max-width: 1000px;
-    overflow-x: auto;
-    
+    max-width: 1500px;
+    overflow-x: unset;
 }
 
 .adminProducts {
@@ -31,12 +29,13 @@
 /* Table Header & Rows (Semantic Naming) */
 .tableContainer {
     width: 100%;
+    overflow-x: unset;
 }
 
 .tableHeader {
     background-color: #f5f5f5;
     display: grid;
-    grid-template-columns: 20px 100px 260px 80px 150px 100px 350px;
+    grid-template-columns: 40px 100px 220px 120px 120px 100px 100px 100px 120px;
     border-bottom: 2px solid rgba(0, 0, 0, 0.5);
     align-items: center;
     height: 60px;
@@ -53,7 +52,7 @@
 .tableRow {
     background-color: #fff;
     display: grid;
-    grid-template-columns: 20px 100px 260px 80px 150px 100px 350px;
+    grid-template-columns: 40px 100px 220px 120px 120px 100px 100px 100px 120px;
     border-bottom: 1px solid #ddd;
     align-items: center;
     height: 80px;
@@ -85,9 +84,32 @@
     width: 100px;
 }
 .cellAction {
-    width: 350px;
+    width: 130px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
 }
 
+.actionButton {
+    cursor: pointer;
+    border-radius: 10px;
+    justify-content: center;
+    align-items: center;
+    width: 50.5px;
+    height: 30.2px;
+    display: flex;
+}
+
+.deleteButton {
+    cursor: pointer;
+    border-radius: 10px;
+    justify-content: center;
+    align-items: center;
+    width: 50.5px;
+    height: 30.2px;
+    display: flex;
+}
 
 .div3 {
     float: left;
@@ -761,4 +783,43 @@
 
 .i17 {
     color: #ef3826;
+}
+
+.tableControls {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin-bottom: 1rem;
+}
+
+.categoryDropdown {
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+}
+
+.sortControls {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.sortControls button {
+    padding: 0.4rem 1.2rem;
+    border: 1px solid #bbb;
+    border-radius: 6px;
+    background: #fff;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: border 0.2s, color 0.2s;
+    color: #222;
+    font-weight: 500;
+    outline: none;
+}
+
+.sortControls button:hover, .sortControls .activeSort {
+    border: 2px solid #bada55;
+    color: #222;
+    background: #f5f5f5;
 }

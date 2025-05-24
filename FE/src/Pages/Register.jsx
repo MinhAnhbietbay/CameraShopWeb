@@ -56,8 +56,11 @@ const Register = ({ setIsLoggedIn }) => {
     try {
       const response = await authApi.register(formData);
       if (response.data) {
-        localStorage.setItem('accessToken', response.data.result.accessToken);
-        localStorage.setItem('refreshToken', response.data.result.refreshToken);
+        const { accessToken, refreshToken, user } = response.data.result;
+        localStorage.setItem('accessToken', accessToken);
+        localStorage.setItem('refreshToken', refreshToken);
+        localStorage.setItem('user', JSON.stringify(user));
+        
         setIsLoggedIn(true);
         navigate("/");
       }

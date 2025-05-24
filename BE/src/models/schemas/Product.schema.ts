@@ -9,6 +9,7 @@ interface ProductType {
     image: string
     count_in_stock: number
     sold: number
+    brand: string
     createdAt?: Date
     updatedAt?: Date
     parentCategory?: string
@@ -23,6 +24,7 @@ class Product {
     image: string
     count_in_stock: number
     sold: number
+    brand: string
     createdAt?: Date
     updatedAt?: Date
     parentCategory?: string
@@ -37,6 +39,7 @@ class Product {
         this.image = product.image
         this.count_in_stock = Number(product.count_in_stock)
         this.sold = Number(product.sold)
+        this.brand = product.brand || ''
         this.createdAt = product.createdAt || date
         this.updatedAt = product.updatedAt || date
         this.parentCategory = product.parentCategory

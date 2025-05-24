@@ -1,74 +1,86 @@
 .container {
     display: flex;
-    flex-direction: column;
     min-height: 100vh;
-    padding-top: 80px;
-    background-color: #f9f9f9;
+    margin-left: 330px;
+    margin-top: 80px;
+    background-color: #f0f0f0;
 }
 
 .content {
     display: flex;
-    flex: 1;
-}
-
-.content>div:first-child {
-    flex: 1;
-    max-width: 180px;
-    min-width: 180px;
-    margin-left: 80px;
+    width: 100%;
 }
 
 .tableSection {
-    flex: 3;
-    border-radius: 5px;
-    padding: 20px;
-    margin-left: 340px !important;
-    max-width: 1000px;
-    overflow-x: auto;
+    flex: 1;
+    padding: 2rem;
 }
 
 .title {
-    margin-top: 20px;
     font-size: 32px;
-    font-weight: bold;
-    margin-bottom: 2rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    color: #333;
 }
 
 .tableContainer {
-    background-color: #fff;
-    border-radius: 5px;
-    width: 100%;
-    min-width: 700px;
-    overflow-x: auto;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
 }
 
 .tableHeader {
     display: grid;
-    grid-template-columns: 10% 10% 20% 20% 15% 15% 10% 10%;
-    background-color: #f5f5f5;
-    font-weight: bold;
-    padding: 10px 20px;
-    border-bottom: 2px solid #ddd;
+    grid-template-columns: 1fr 1fr 1.5fr 1fr 1.5fr 0.8fr 1fr 0.8fr 0.8fr;
+    padding: 1rem;
+    background-color: #f8f9fa;
+    border-bottom: 2px solid #e9ecef;
+    font-weight: 600;
+    color: #495057;
 }
 
-.tableHeader>div {
-    text-align: center;
+.sortableHeader {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    user-select: none;
+}
+
+.sortableHeader:hover {
+    color: #007bff;
+}
+
+.sortIcon {
+    width: 16px;
+    height: 16px;
+    transition: transform 0.2s ease;
+}
+
+.sortDesc {
+    transform: rotate(180deg);
 }
 
 .row {
     display: grid;
-    grid-template-columns: 10% 10% 20% 20% 15% 15% 10% 10%;
-    padding: 10px 20px;
-    border-bottom: 1px solid #ddd;
+    grid-template-columns: 1fr 1fr 1.5fr 1fr 1.5fr 0.8fr 1fr 0.8fr 0.8fr;
+    padding: 1rem;
+    border-bottom: 1px solid #e9ecef;
     align-items: center;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
 }
 
-.row:last-child {
-    border-bottom: none;
+.row:hover {
+    background-color: #f8f9fa;
 }
 
-.row>div {
-    text-align: center;
+.id, .name, .address, .date, .phone, .email, .role, .action, .orders, .totalSpent {
+    padding: 0.5rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .emailLink {
@@ -80,32 +92,114 @@
     text-decoration: underline;
 }
 
-.role {
-    text-align: center;
+.deleteButton, .editButton {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.25rem;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+}
+
+.deleteButton:hover {
+    background-color: #f8d7da;
+}
+
+.editButton:hover {
+    background-color: #e2e3e5;
+}
+
+.icon {
+    width: 20px;
+    height: 20px;
+}
+
+.orders, .totalSpent {
+    text-align: right;
     font-weight: 500;
-    color: #333;
 }
 
-.action {
+.ordersHeader, .totalSpentHeader {
+    text-align: right;
+}
+
+.totalSpent {
+    color: #28a745;
+}
+
+.roleDisplay {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.roleEdit {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.roleEdit select {
+    padding: 0.25rem;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    background-color: white;
+}
+
+.roleActions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.roleActions button {
+    padding: 0.25rem 0.5rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.875rem;
+}
+
+.roleActions button:first-child {
+    background-color: #28a745;
+    color: white;
+}
+
+.roleActions button:last-child {
+    background-color: #6c757d;
+    color: white;
+}
+
+.orderDetails {
+    background-color: #f8f9fa;
+    padding: 1rem;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.orderList {
+    margin-top: 0.5rem;
+}
+
+.orderTable {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+}
+
+.orderTable th,
+.orderTable td {
+    padding: 0.5rem;
+    text-align: left;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.orderTable th {
+    background-color: #e9ecef;
+    font-weight: 600;
+}
+
+.noOrders {
     text-align: center;
-}
-
-.deleteButton {
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.deleteButton .icon {
-  width: 18px;
-  height: 18px;
-}
-
-/* Optional: Add hover effect for delete button */
-.deleteButton:hover .icon {
-  filter: invert(30%) sepia(90%) saturate(3000%) hue-rotate(340deg) brightness(90%) contrast(80%); /* Red tint on hover */
+    padding: 1rem;
+    color: #6c757d;
+    font-style: italic;
 }

@@ -26,12 +26,12 @@ export const addProductValidator = validate(
                 },
                 toFloat: true
             },
-            maker: {
+            brand: {
                 notEmpty: {
-                    errorMessage: PRODUCTS_MESSAGES.MAKER_IS_REQUIRED
+                    errorMessage: PRODUCTS_MESSAGES.BRAND_IS_REQUIRED
                 },
                 isString: {
-                    errorMessage: PRODUCTS_MESSAGES.MAKER_MUST_BE_STRING
+                    errorMessage: PRODUCTS_MESSAGES.BRAND_MUST_BE_STRING
                 },
                 trim: true
             },
@@ -85,6 +85,13 @@ export const updateProductValidator = validate(
                     errorMessage: PRODUCTS_MESSAGES.PRICE_MUST_BE_POSITIVE_NUMBER
                 },
                 toFloat: true
+            },
+            brand: {
+                optional: true,
+                isString: {
+                    errorMessage: PRODUCTS_MESSAGES.BRAND_MUST_BE_STRING
+                },
+                trim: true
             },
             description: {
                 optional: true,
