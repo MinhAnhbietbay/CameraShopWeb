@@ -40,49 +40,20 @@ const Login = ({ setIsLoggedIn }) => {
     try {
       const response = await authApi.login(formData);
       if (response.data) {
-        localStorage.setItem('accessToken', response.data.accessToken);
-        localStorage.setItem('refreshToken', response.data.refreshToken);
-        
-        // Pass user data to handleLoginSuccess
-        setIsLoggedIn(response.data.user); 
-
-        // Check user role and navigate accordingly
-        if (response.data.user && response.data.user.role === 'admin') {
-          navigate("/admin"); // Navigate to admin dashboard
-        } else {
-          navigate("/"); // Navigate to home page or user dashboard
-        }
+        localStorage.setItem('accessToken', response.data.result.accessToken);
+        localStorage.setItem('refreshToken', response.data.result.refreshToken);
+        setIsLoggedIn(true);
+        navigate("/");
       }
     } catch (error) {
-      if (error.response && error.response.status === 422) {
-         // Xử lý lỗi validation từ backend
-         const errors = error.response.data.errors;
-         const mappedErrors = {};
-         if (Array.isArray(errors)) {
-            errors.forEach(err => {
-              if (err.path) {
-                mappedErrors[err.path] = err.msg;
-              }
-            });
-         } else if (errors && typeof errors === 'object') {
-            // Handle case where errors might be a single object or different structure
-            // Based on backend response structure, adjust this parsing logic
-            for (const key in errors) {
-                if (errors[key].msg) {
-                    mappedErrors[key] = errors[key].msg;
-                } else {
-                    mappedErrors[key] = errors[key];
-                }
-            }
-         }
-
+      if (error.errors) {
+        const mappedErrors = {};
+        Object.keys(error.errors).forEach(key => {
+          mappedErrors[key] = error.errors[key];
+        });
         setFieldErrors(mappedErrors);
-        setError(error.response.data.message || "Validation failed!");
-
-      } else {
-        // Xử lý lỗi khác (network, server error 500,...)
-        setError(error.response?.data?.message || "Login failed!");
       }
+      setError(error.message || "Login failed!");
     }
   };
 

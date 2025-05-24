@@ -3,14 +3,14 @@ import axios from 'axios';
 const API_URL = 'http://localhost:3000';
 
 export const authApi = {
-    login: async (email, password) => {
+    login: async (data) => {
         try {
-            const response = await axios.post(`${API_URL}/auth/login`, {
-                email,
-                password
-            });
+            const response = await axios.post(`${API_URL}/auth/login`, data);
             return response;
         } catch (error) {
+            if (error.response) {
+                throw error.response.data;
+            }
             throw error;
         }
     },
@@ -20,6 +20,9 @@ export const authApi = {
             const response = await axios.post(`${API_URL}/auth/register`, userData);
             return response;
         } catch (error) {
+            if (error.response) {
+                throw error.response.data;
+            }
             throw error;
         }
     },
