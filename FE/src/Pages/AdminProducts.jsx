@@ -4,7 +4,7 @@ import AdminPanel from "../Components/AdminPanel";
 import edit from "../assets/icons/edit.svg";
 import deleteIcon from "../assets/icons/deleteIcon.svg";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 function IconButton({ className, icon, onClick, ariaLabel }) {
   return (
@@ -64,13 +64,17 @@ function ProductTable() {
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [totalPages, setTotalPages] = useState(1);
+  const location = useLocation();
 
   useEffect(() => {
+    // Lấy search param từ URL
+    const params = new URLSearchParams(location.search);
+    const search = params.get('search') || '';
     // Fetch products
     const fetchProducts = async () => {
       try {
         const res = await axios.get('http://localhost:3000/products/products', {
-          params: { page, pageSize }
+          params: { page, pageSize, query: search }
         });
         setProducts(res.data.result.products || []);
         setTotalPages(res.data.result.pagination?.totalPages || 1);
@@ -83,7 +87,7 @@ function ProductTable() {
       }
     };
     fetchProducts();
-  }, [page, pageSize]);
+  }, [page, pageSize, location.search]);
 
   // Lọc theo danh mục
   const filteredProducts = selectedCategory === 'All'
@@ -101,7 +105,8 @@ function ProductTable() {
     if (sortField === 'price') {
       return sortOrder === 'asc' ? a.price - b.price : b.price - a.price;
     }
-    return 0;
+    // Mặc định: sort theo createdAt giảm dần (mới nhất trước)
+    return new Date(b.createdAt) - new Date(a.createdAt);
   });
 
   const handleDeleteProduct = async (productId) => {

@@ -3,6 +3,7 @@ import styles from "./AdminOrders.module.css";
 import AdminPanel from "../Components/AdminPanel";
 import { orderApi } from "../api";
 import sortIcon from "../assets/icons/sortIcon.svg";
+import { useLocation } from "react-router-dom";
 
 const STATUS_OPTIONS = [
   "pending",
@@ -66,11 +67,14 @@ function OrderTable() {
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [totalPages, setTotalPages] = useState(1);
+  const location = useLocation();
 
   useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const search = params.get('search') || '';
     const fetchOrders = async () => {
       try {
-        const response = await orderApi.getOrders({ page, pageSize });
+        const response = await orderApi.getOrders({ page, pageSize, search });
         const ordersData = response.data?.result?.orders || [];
         setOrders(Array.isArray(ordersData) ? ordersData : []);
         setTotalPages(response.data?.result?.pagination?.totalPages || 1);
@@ -83,7 +87,7 @@ function OrderTable() {
       }
     };
     fetchOrders();
-  }, [page, pageSize]);
+  }, [page, pageSize, location.search]);
 
   const handleSort = (field) => {
     if (sortField === field) {

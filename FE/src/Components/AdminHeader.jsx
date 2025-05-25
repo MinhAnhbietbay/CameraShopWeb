@@ -32,8 +32,13 @@ function AdminHeader() {
     const handleSearch = (e) => {
         e.preventDefault();
         if (searchValue.trim()) {
-            // Ví dụ: chuyển hướng sang trang tìm kiếm sản phẩm admin
-            navigate(`/admin/products?search=${encodeURIComponent(searchValue)}`);
+            let path = "/admin/products";
+            if (location.pathname.startsWith("/admin/users")) {
+                path = "/admin/users";
+            } else if (location.pathname.startsWith("/admin/orders")) {
+                path = "/admin/orders";
+            }
+            navigate(`${path}?search=${encodeURIComponent(searchValue)}`);
         }
     };
 

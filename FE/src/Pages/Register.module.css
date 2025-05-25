@@ -8,13 +8,13 @@
     height: auto;
     min-height: 600px;
     padding: 30px 25px;
-    margin-left: 520px;
+    margin-left: 570px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .text {
     text-align: center;
-    margin-top: 50px;
+    margin-top: -20px;
     margin-bottom: 30px;
     color: #333;
     font-size: 24px;

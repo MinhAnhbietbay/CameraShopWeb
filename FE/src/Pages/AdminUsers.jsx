@@ -4,6 +4,7 @@ import AdminPanel from "../Components/AdminPanel";
 import api from "../api"; // Thay thế axios bằng api từ api.js
 import deleteIcon from "../assets/icons/deleteIcon.svg"; // Import icon delete
 import sortIcon from "../assets/icons/sortIcon.svg";
+import { useLocation } from "react-router-dom";
 
 function IconButton({ className, icon, onClick, ariaLabel }) {
   return (
@@ -81,19 +82,20 @@ function UserTable() {
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [totalPages, setTotalPages] = useState(1);
+  const location = useLocation();
 
   useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const search = params.get('search') || '';
     const fetchUsersAndOrders = async () => {
       try {
         // Fetch all users
-        const usersResponse = await api.get('/users/all-users', { params: { page, pageSize } });
+        const usersResponse = await api.get('/users/all-users', { params: { page, pageSize, search } });
         const usersData = usersResponse.data?.result?.users || [];
         setTotalPages(usersResponse.data?.result?.pagination?.totalPages || 1);
-
         // Fetch all orders for admin view
         const ordersResponse = await api.get('/orders/order-list');
         const allOrders = ordersResponse.data?.result?.orders || [];
-
         // Calculate order counts and total spent for each user
         const orderDataByUser = allOrders.reduce((acc, order) => {
           const userId = order.user_id; // Assuming order object has user_id field
@@ -104,14 +106,12 @@ function UserTable() {
           acc[userId].totalSpent += order.total_amount || 0;
           return acc;
         }, {});
-
         // Combine user data with order data
         const usersWithOrders = usersData.map(user => ({
           ...user,
           orderCount: orderDataByUser[user._id]?.orderCount || 0,
           totalSpent: orderDataByUser[user._id]?.totalSpent || 0
         }));
-
         setUsers(usersWithOrders);
         setLoading(false);
       } catch (err) {
@@ -122,9 +122,8 @@ function UserTable() {
         setTotalPages(1);
       }
     };
-
     fetchUsersAndOrders();
-  }, [page, pageSize]);
+  }, [page, pageSize, location.search]);
 
   const handleDeleteUser = async (userId) => {
     try {
