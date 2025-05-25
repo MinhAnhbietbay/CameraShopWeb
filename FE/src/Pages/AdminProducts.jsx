@@ -4,6 +4,7 @@ import AdminPanel from "../Components/AdminPanel";
 import edit from "../assets/icons/edit.svg";
 import deleteIcon from "../assets/icons/deleteIcon.svg";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function IconButton({ className, icon, onClick, ariaLabel }) {
   return (
@@ -23,6 +24,7 @@ function SortArrow({ active, order }) {
 }
 
 function ProductRow({ product, index, onDelete }) {
+  const navigate = useNavigate();
   return (
     <article className={styles.tableRow}>
       <div className={styles.cellIndex}>{index + 1}</div>
@@ -40,6 +42,7 @@ function ProductRow({ product, index, onDelete }) {
           className={styles.actionButton}
           icon={edit}
           ariaLabel="Edit product"
+          onClick={() => navigate(`/admin/products/edit/${product._id}`)}
         />
         <IconButton
           className={styles.deleteButton}

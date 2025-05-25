@@ -233,36 +233,6 @@ function AdminDashboard() {
                                 </div>
                             </div>
                         </div>
-
-                        {/* To-do List */}
-                        <div className={styles.todoList}>
-                            <h2>To do list</h2>
-                            <a href="#" className={styles.addNew}>
-                                Add new
-                            </a>
-                            <ul>
-                                {tasks.map((task, index) => (
-                                    <li key={index} className={styles.todoItem}>
-                                        <input type="checkbox" />
-                                        <input
-                                            type="text"
-                                            value={task.text}
-                                            onChange={(e) => handleTaskChange(index, e.target.value)}
-                                            className={styles.taskInput}
-                                        />
-                                        <button
-                                            className={`${styles.iconButton} ${task.starred ? styles.starred : ""}`}
-                                            onClick={() => toggleStar(index)}
-                                        >
-                                            <img src={star} alt="Star" />
-                                        </button>
-                                        <button className={styles.iconButton}>
-                                            <img src={deleteIcon} alt="Delete" />
-                                        </button>
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
                     </div>
                 </section>
             </div>

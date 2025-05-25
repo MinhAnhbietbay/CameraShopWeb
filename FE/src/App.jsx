@@ -20,6 +20,7 @@ import AdminProducts from "./Pages/AdminProducts";
 import AdminAddProduct from "./Pages/AdminAddProduct";
 import AdminOrders from "./Pages/AdminOrders";
 import AdminUsers from "./Pages/AdminUsers";
+import AdminEditProduct from "./Pages/AdminEditProduct";
 
 import { authApi } from "./services/authApi";
 
@@ -86,6 +87,7 @@ function App() {
         <Route path="/admin" element={<AdminPrivateRoute element={AdminDashboard} />} />
         <Route path="/admin/products" element={<AdminPrivateRoute element={AdminProducts} />} />
         <Route path="/admin/products/add" element={<AdminPrivateRoute element={AdminAddProduct} />} />
+        <Route path="/admin/products/edit/:productId" element={<AdminPrivateRoute element={AdminEditProduct} />} />
         <Route path="/admin/orders" element={<AdminPrivateRoute element={AdminOrders} />} />
         <Route path="/admin/users" element={<AdminPrivateRoute element={AdminUsers} />} />
       </Routes>

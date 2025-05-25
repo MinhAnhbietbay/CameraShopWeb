@@ -69,13 +69,18 @@
     width: 100px;
 }
 .cellName {
-    width: 260px;
+    width: 250px;
+    max-width: 220px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-align: left;
 }
 .cellCategory {
-    width: 80px;
+    width: 135px;
 }
 .cellPrice {
-    width: 150px;
+    width: 100px;
     color: #32cd32;
     font-size: 14px;
     font-weight: 500;
