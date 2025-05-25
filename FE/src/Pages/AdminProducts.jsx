@@ -61,22 +61,29 @@ function ProductTable() {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [sortField, setSortField] = useState('');
   const [sortOrder, setSortOrder] = useState('asc');
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
     // Fetch products
     const fetchProducts = async () => {
       try {
-        const res = await axios.get('http://localhost:3000/products/products');
+        const res = await axios.get('http://localhost:3000/products/products', {
+          params: { page, pageSize }
+        });
         setProducts(res.data.result.products || []);
+        setTotalPages(res.data.result.pagination?.totalPages || 1);
         // Lấy danh sách danh mục duy nhất
         const cats = Array.from(new Set((res.data.result.products || []).map(p => p.category)));
         setCategories(cats);
       } catch (err) {
         setProducts([]);
+        setTotalPages(1);
       }
     };
     fetchProducts();
-  }, []);
+  }, [page, pageSize]);
 
   // Lọc theo danh mục
   const filteredProducts = selectedCategory === 'All'
@@ -123,6 +130,15 @@ function ProductTable() {
     }
   };
 
+  // Phân trang
+  const Pagination = ({ page, totalPages, onPageChange }) => (
+    <div style={{ margin: '16px 0', textAlign: 'center' }}>
+      <button onClick={() => onPageChange(page - 1)} disabled={page === 1}>Previous</button>
+      <span style={{ margin: '0 12px' }}>{page} / {totalPages}</span>
+      <button onClick={() => onPageChange(page + 1)} disabled={page === totalPages}>Next</button>
+    </div>
+  );
+
   return (
     <section className={styles.tableContainer}>
       <div className={styles.tableControls}>
@@ -164,10 +180,11 @@ function ProductTable() {
         <ProductRow 
           key={product._id} 
           product={product} 
-          index={idx}
+          index={idx + (page-1)*pageSize}
           onDelete={handleDeleteProduct}
         />
       ))}
+      <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
     </section>
   );
 }

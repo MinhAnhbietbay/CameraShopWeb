@@ -78,13 +78,17 @@ function UserTable() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [sortOrder, setSortOrder] = useState('asc');
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
     const fetchUsersAndOrders = async () => {
       try {
         // Fetch all users
-        const usersResponse = await api.get('/users/all-users');
+        const usersResponse = await api.get('/users/all-users', { params: { page, pageSize } });
         const usersData = usersResponse.data?.result?.users || [];
+        setTotalPages(usersResponse.data?.result?.pagination?.totalPages || 1);
 
         // Fetch all orders for admin view
         const ordersResponse = await api.get('/orders/order-list');
@@ -115,11 +119,12 @@ function UserTable() {
         setError('Failed to fetch users or orders');
         setUsers([]);
         setLoading(false);
+        setTotalPages(1);
       }
     };
 
     fetchUsersAndOrders();
-  }, []); // Dependency array trống để chỉ chạy 1 lần khi component mount
+  }, [page, pageSize]);
 
   const handleDeleteUser = async (userId) => {
     try {
@@ -152,6 +157,14 @@ function UserTable() {
   // Add a check for empty users array before rendering
   if (!users || users.length === 0) return <div>No users found</div>;
 
+  const Pagination = ({ page, totalPages, onPageChange }) => (
+    <div style={{ margin: '16px 0', textAlign: 'center' }}>
+      <button onClick={() => onPageChange(page - 1)} disabled={page === 1}>Previous</button>
+      <span style={{ margin: '0 12px' }}>{page} / {totalPages}</span>
+      <button onClick={() => onPageChange(page + 1)} disabled={page === totalPages}>Next</button>
+    </div>
+  );
+
   return (
     <section className={styles.tableContainer}>
       <header className={styles.tableHeader}>
@@ -172,6 +185,7 @@ function UserTable() {
           <UserRow key={user._id} user={user} onDelete={handleDeleteUser} onRoleChange={handleRoleChange} />
         ))}
       </div>
+      <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
     </section>
   );
 }

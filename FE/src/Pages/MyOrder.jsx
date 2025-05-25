@@ -55,6 +55,9 @@ function MyOrder() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [filterStatus, setFilterStatus] = useState('All');
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [totalPages, setTotalPages] = useState(1);
 
   console.log('MyOrder component rendered');
 
@@ -74,21 +77,31 @@ function MyOrder() {
             : [];
 
         setOrders(sortedOrders);
+        // Tính tổng số trang
+        setTotalPages(Math.ceil(sortedOrders.length / pageSize) || 1);
         setLoading(false);
       } catch (err) {
         console.error('Error fetching my orders:', err);
         setError('Failed to fetch orders');
         setOrders([]);
+        setTotalPages(1);
         setLoading(false);
       }
     };
 
     fetchMyOrders();
-  }, []);
+  }, [pageSize]);
 
   const filteredOrders = filterStatus === 'All'
     ? orders
     : orders.filter(order => order.status === filterStatus.toLowerCase());
+
+  // Phân trang ở FE
+  const paginatedOrders = filteredOrders.slice((page - 1) * pageSize, page * pageSize);
+  useEffect(() => {
+    setTotalPages(Math.ceil(filteredOrders.length / pageSize) || 1);
+    if (page > Math.ceil(filteredOrders.length / pageSize)) setPage(1);
+  }, [filteredOrders, pageSize]);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
@@ -108,7 +121,7 @@ function MyOrder() {
       <div className={styles.mainLayout}>
         {/* Sidebar */}
         <div className={styles.sidebarContainer}>
-          <h2 className={styles.sidebarTitle}>Account Navigation</h2>
+          <h2 className={styles.sidebarTitle}>Have a good time</h2>
           <Sidebar />
         </div>
 
@@ -130,11 +143,21 @@ function MyOrder() {
           </div>
 
           {/* Order Details */}
-          <OrderDetailsList orders={filteredOrders} />
+          <OrderDetailsList orders={paginatedOrders} />
+          <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
         </div>
       </div>
     </div>
   );
 }
+
+// Component Pagination
+const Pagination = ({ page, totalPages, onPageChange }) => (
+  <div style={{ margin: '16px 0', textAlign: 'center' }}>
+    <button onClick={() => onPageChange(page - 1)} disabled={page === 1}>Previous</button>
+    <span style={{ margin: '0 12px' }}>{page} / {totalPages}</span>
+    <button style={{ marginTop: '20px' }} onClick={() => onPageChange(page + 1)} disabled={page === totalPages}>Next</button>
+  </div>
+);
 
 export default MyOrder;

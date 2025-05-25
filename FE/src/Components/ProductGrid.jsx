@@ -1,31 +1,28 @@
 import React, { useState, useEffect } from "react";
 import styles from "../Pages/SearchResult.module.css";
-import ProductCard from "./ProductCard";
-import { Link } from "react-router-dom";
+import AddToCartButton from "./AddToCartButton";
+import Pagination from "./Pagination";
+import { useNavigate } from "react-router-dom";
 
 function ProductGrid({ category, query, filters, products }) {
   const [filteredProducts, setFilteredProducts] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const productsPerPage = 10;
+  const navigate = useNavigate();
 
   useEffect(() => {
-    console.log("Filters:", filters);
-    console.log("Category:", category);
-    console.log("Query:", query);
-
     let result = [...products];
 
     if (category) {
       result = result.filter(product =>
         product.category && product.category.toLowerCase() === category.toLowerCase()
       );
-      // Nếu có type, filter tiếp theo type
       if (filters?.type) {
         result = result.filter(product =>
           product.type && product.type.toLowerCase() === filters.type.toLowerCase()
         );
       }
     }
-
-    // Lọc theo query
     if (query) {
       const searchQuery = query.toLowerCase();
       result = result.filter(product =>
@@ -33,22 +30,16 @@ function ProductGrid({ category, query, filters, products }) {
         (product.brand && product.brand.toLowerCase().includes(searchQuery))
       );
     }
-
-    // Lọc theo brand
     if (filters?.brand && filters.brand !== "All") {
       result = result.filter(product => 
         product.brand && product.brand === filters.brand
       );
     }
-
-    // Lọc theo condition
     if (filters?.condition) {
       result = result.filter(product =>
         product.condition && product.condition.toLowerCase() === filters.condition.toLowerCase()
       );
     }
-
-    // Sắp xếp
     if (filters?.sortBy) {
       switch (filters.sortBy) {
         case "az":
@@ -67,28 +58,53 @@ function ProductGrid({ category, query, filters, products }) {
           break;
       }
     }
-
     setFilteredProducts(result);
+    setCurrentPage(1); // Reset về trang 1 khi filter thay đổi
   }, [category, query, filters, products]);
 
+  // Phân trang
+  const indexOfLast = currentPage * productsPerPage;
+  const indexOfFirst = indexOfLast - productsPerPage;
+  const currentProducts = filteredProducts.slice(indexOfFirst, indexOfLast);
+  const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
+
+  const handlePrev = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
+  const handleNext = () => setCurrentPage((prev) => Math.min(prev + 1, totalPages));
+
+  const ProductCard = ({ product }) => (
+    <article className={styles.productCard}>
+      <img
+        src={product.image || (product.images && product.images[0]) || "https://via.placeholder.com/200"}
+        alt={product.name}
+        className={styles.productImage}
+        onClick={() => navigate(`/products/${product.category}/${product._id}`)}
+        style={{ cursor: "pointer" }}
+      />
+      <h3 className={styles.productName}>{product.name}</h3>
+      <p className={styles.productPrice}>{product.price ? `$${product.price.toLocaleString()}` : "N/A"}</p>
+      <AddToCartButton product={product} />
+    </article>
+  );
+
   return (
-    <div className={styles.productGrid}>
-      {filteredProducts.length === 0 ? (
-        <div className={styles.noResultsMessage}>Không tìm thấy sản phẩm nào.</div>
-      ) : (
-        filteredProducts.map((product) => (
-          <Link to={`/products/${product.category}/${product._id}`} key={product._id} className={styles.productLink}>
-            <ProductCard
-              image={product.image}
-              name={product.name}
-              price={product.price ? `$${product.price.toFixed(2)}` : 'N/A'}
-              alt={product.alt || product.name}
-              styleClass={styles.productCard}
-              nameClass={styles.productName}
-              priceClass={styles.productPrice}
-            />
-          </Link>
-        ))
+    <div>
+      <div className={styles.productGrid}>
+        {currentProducts.length === 0 ? (
+          <div className={styles.noResultsMessage}>Không tìm thấy sản phẩm nào.</div>
+        ) : (
+          currentProducts.map((product) => (
+            <ProductCard key={product._id} product={product} />
+          ))
+        )}
+      </div>
+      {/* Thanh chuyển trang */}
+      {totalPages > 1 && (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPrev={handlePrev}
+          onNext={handleNext}
+        />
       )}
     </div>
   );

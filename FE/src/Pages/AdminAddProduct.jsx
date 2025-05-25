@@ -48,6 +48,15 @@ function AdminAddProduct() {
         { label: "Light Stands", value: "light-stands" },
         { label: "Studio Backgrounds", value: "studio-backgrounds" }
       ]
+    },
+    {
+      label: "Used",
+      value: "used",
+      types: [
+        { label: "Used Cameras", value: "used-cameras" },
+        { label: "Used Lenses", value: "used-lenses" },
+        { label: "Used Accessories", value: "used-accessories" }
+      ]
     }
   ];
 

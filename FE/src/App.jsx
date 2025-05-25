@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from "react-router-dom";
+import ScrollToTop from "./Components/ScrollToTop";
 
 import Home from "./Pages/Home";
 import Footer from "./Components/Footer";
@@ -59,6 +60,7 @@ function App() {
 
   return (
     <Router>
+      <ScrollToTop />
       <HeaderWrapper isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
       <Routes>
         <Route path="/" element={<Home />} />

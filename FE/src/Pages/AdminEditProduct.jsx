@@ -90,6 +90,15 @@ function AdminEditProduct() {
         { label: "Light Stands", value: "light-stands" },
         { label: "Studio Backgrounds", value: "studio-backgrounds" }
       ]
+    },
+    {
+      label: "Used",
+      value: "used",
+      types: [
+        { label: "Used Cameras", value: "used-cameras" },
+        { label: "Used Lenses", value: "used-lenses" },
+        { label: "Used Accessories", value: "used-accessories" }
+      ]
     }
   ];
 
@@ -203,11 +212,12 @@ function AdminEditProduct() {
       });
       const featuresForServer = formData.features.map(f => ({
         title: f.title,
-        description: f.description
+        description: f.description,
+        image: typeof f.image === 'string' ? f.image : undefined
       }));
       form.append('features', JSON.stringify(featuresForServer));
       formData.features.forEach((feature, idx) => {
-        if (feature.image) {
+        if (feature.image && typeof feature.image !== 'string') {
           form.append(`features[${idx}][image]`, feature.image);
         }
       });

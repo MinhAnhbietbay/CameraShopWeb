@@ -63,22 +63,27 @@ function OrderTable() {
   const [sortField, setSortField] = useState('createdAt');
   const [sortOrder, setSortOrder] = useState('desc');
   const [selectedOrder, setSelectedOrder] = useState(null);
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await orderApi.getOrders();
+        const response = await orderApi.getOrders({ page, pageSize });
         const ordersData = response.data?.result?.orders || [];
         setOrders(Array.isArray(ordersData) ? ordersData : []);
+        setTotalPages(response.data?.result?.pagination?.totalPages || 1);
         setLoading(false);
       } catch (err) {
         setError('Failed to fetch orders');
         setOrders([]);
         setLoading(false);
+        setTotalPages(1);
       }
     };
     fetchOrders();
-  }, []);
+  }, [page, pageSize]);
 
   const handleSort = (field) => {
     if (sortField === field) {
@@ -111,6 +116,14 @@ function OrderTable() {
     }
     return 0;
   });
+
+  const Pagination = ({ page, totalPages, onPageChange }) => (
+    <div style={{ margin: '16px 0', textAlign: 'center' }}>
+      <button onClick={() => onPageChange(page - 1)} disabled={page === 1}>Previous</button>
+      <span style={{ margin: '0 12px' }}>{page} / {totalPages}</span>
+      <button onClick={() => onPageChange(page + 1)} disabled={page === totalPages}>Next</button>
+    </div>
+  );
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
@@ -148,6 +161,7 @@ function OrderTable() {
         ))}
       </div>
       {selectedOrder && <OrderDetail order={selectedOrder} onClose={() => setSelectedOrder(null)} />}
+      <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
     </section>
   );
 }

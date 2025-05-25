@@ -1,6 +1,7 @@
-import React, { useState } from "react"; // quản lý trạng thái đóng mở menu
+import React, { useState, useEffect } from "react"; // quản lý trạng thái đóng mở menu
 import { Link, useNavigate } from "react-router-dom";
 import styles from "./Header.module.css";
+import { productApi } from "../api";
 
 import logo from "../assets/icons/logo.svg";
 import arrowdown from "../assets/icons/arrowdown.svg";
@@ -55,11 +56,12 @@ const menuData = {
   //   })),
   // },
   Used: {
-    link: "/search?condition=used",
-    subItems: ["Used Cameras", "Used Lenses", "Used Accessories"].map((item) => ({
-      label: item,
-      link: `/search?condition=used&category=${item.toLowerCase().replace(/\s+/g, "-")}`,
-    })),
+    link: "/search?category=used",
+    subItems: [
+      { label: "Used Cameras", link: "/search?category=used&type=used-cameras" },
+      { label: "Used Lenses", link: "/search?category=used&type=used-lenses" },
+      { label: "Used Accessories", link: "/search?category=used&type=used-accessories" }
+    ]
   },
 };
 
@@ -154,57 +156,147 @@ const Navigation = () => {
 };
 
 const IconGroup = ({ isLoggedIn, setIsLoggedIn }) => {
-  const [showSearch, setShowSearch] = useState(false); // Trạng thái hiển thị thanh tìm kiếm
+  const [showSearch, setShowSearch] = useState(false);
   const navigate = useNavigate();
-  const [searchQuery, setSearchQuery] = useState(""); // Trạng thái lưu từ khóa tìm kiếm
-  const [showMenu, setShowMenu] = useState(false); // Trạng thái hiển thị menu dropdown
+  const [searchQuery, setSearchQuery] = useState("");
+  const [showMenu, setShowMenu] = useState(false);
+  const [searchResults, setSearchResults] = useState([]);
+  const [isSearching, setIsSearching] = useState(false);
+
+  // Debounce function để tránh gọi API quá nhiều
+  const debounce = (func, delay) => {
+    let timeoutId;
+    return (...args) => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => func(...args), delay);
+    };
+  };
+
+  // Hàm tìm kiếm sản phẩm
+  const searchProducts = async (query) => {
+    if (query.trim().length === 0) {
+      setSearchResults([]);
+      return;
+    }
+
+    try {
+      setIsSearching(true);
+      const response = await productApi.getAll({ query });
+      if (response.data?.result?.products) {
+        setSearchResults(response.data.result.products);
+      } else {
+        setSearchResults([]);
+      }
+    } catch (error) {
+      console.error("Error searching products:", error);
+      setSearchResults([]);
+    } finally {
+      setIsSearching(false);
+    }
+  };
+
+  // Tạo debounced search function
+  const debouncedSearch = debounce(searchProducts, 300);
+
+  // Xử lý khi người dùng nhập
+  const handleSearchInput = (e) => {
+    const value = e.target.value;
+    setSearchQuery(value);
+    debouncedSearch(value);
+  };
 
   const handleUserClick = () => {
     if (isLoggedIn) {
-      setShowMenu(!showMenu); // Hiển thị hoặc ẩn menu dropdown
+      setShowMenu(!showMenu);
     } else {
-      navigate("/login"); // Điều hướng đến trang đăng nhập nếu chưa đăng nhập
+      navigate("/login");
     }
   };
 
   const handleLogout = () => {
-    setIsLoggedIn(false); // Đặt trạng thái đăng xuất
-    setShowMenu(false); // Ẩn menu dropdown
-    navigate("/"); // Điều hướng về trang chủ
+    setIsLoggedIn(false);
+    setShowMenu(false);
+    navigate("/");
   };
 
   const handleSearch = () => {
     if (searchQuery.trim() !== "") {
-      navigate(`/search?query=${encodeURIComponent(searchQuery)}`); // Điều hướng đến trang kết quả tìm kiếm
+      navigate(`/search?query=${encodeURIComponent(searchQuery)}`);
+      setShowSearch(false);
+      setSearchQuery("");
+      setSearchResults([]);
     }
   };
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
-      handleSearch(); // Gọi hàm tìm kiếm khi nhấn Enter
+      handleSearch();
     }
   };
+
+  // Đóng kết quả tìm kiếm khi click ra ngoài
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (showSearch && !event.target.closest(`.${styles.searchContainer}`)) {
+        setShowSearch(false);
+        setSearchQuery("");
+        setSearchResults([]);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showSearch]);
 
   return (
     <div className={styles.groupHeader}>
       {/*Search*/}
-      <button
-        className={styles.menuBtn}
-        onClick={() => setShowSearch(!showSearch)}
-      >
-        <img src={search} alt="Search" />
-      </button>
-      {showSearch && (
-        <input
-          type="text"
-          className={styles.searchInput}
-          placeholder="Search..."
-          value={searchQuery} // Liên kết với trạng thái searchQuery
-          onChange={(e) => setSearchQuery(e.target.value)} // Cập nhật trạng thái khi nhập
-          onKeyDown={handleKeyDown} // Lắng nghe sự kiện nhấn phím
-        />
-      )}
-  
+      <div className={styles.searchContainer}>
+        <button
+          className={styles.menuBtn}
+          onClick={() => setShowSearch(!showSearch)}
+        >
+          <img src={search} alt="Search" />
+        </button>
+        {showSearch && (
+          <div className={styles.searchWrapper}>
+            <input
+              type="text"
+              className={styles.searchInput}
+              placeholder="Search products..."
+              value={searchQuery}
+              onChange={handleSearchInput}
+              onKeyDown={handleKeyDown}
+              autoFocus
+            />
+            {isSearching && <div className={styles.searching}>Searching...</div>}
+            {searchResults.length > 0 && (
+              <div className={styles.searchResults}>
+                {searchResults.map((product) => (
+                  <Link
+                    key={product._id}
+                    to={`/products/${product.category}/${product._id}`}
+                    className={styles.searchResultItem}
+                    onClick={() => {
+                      setShowSearch(false);
+                      setSearchQuery("");
+                      setSearchResults([]);
+                    }}
+                  >
+                    <div className={styles.searchResultInfo}>
+                      <h4>{product.name || "Unnamed Product"}</h4>
+                      <p>{product.price ? product.price.toLocaleString() : "0"} $</p>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+
       {/*User*/}
       <div className={styles.userMenu}>
         <button className={styles.usermenuBtn} onClick={handleUserClick}>

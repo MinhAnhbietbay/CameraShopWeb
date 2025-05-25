@@ -6,7 +6,7 @@ import arrow from "../assets/icons/arrow.svg";
 
 function NavigationItem({ text, link }) {
     return (
-      <Link to={link} className={styles.navItem}> {/* Sử dụng Link để điều hướng */}
+      <Link to={link} className={styles.navItem}>
         <div className={styles.navItemText}>{text}</div>
         <div>
           <img src={arrow} alt="Arrow" className={styles.arrowIcon} />

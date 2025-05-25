@@ -68,6 +68,7 @@
     display: flex;
     align-items: center;
     height: 40px;
+    margin-top: 20px;
 }
 
 .navMenu {

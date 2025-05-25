@@ -25,6 +25,9 @@ const SearchResults = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -36,7 +39,9 @@ const SearchResults = () => {
           category: category,
           type: type,
           condition: condition,
-          ...filters
+          ...filters,
+          page,
+          pageSize
         };
         if (filters.brand === "All") {
           delete params.brand;
@@ -51,20 +56,23 @@ const SearchResults = () => {
             return dateB - dateA; // Sort descending
           });
           setProducts(sortedProducts);
+          setTotalPages(response.data.result.pagination?.totalPages || 1);
         } else {
           setProducts([]);
+          setTotalPages(1);
         }
       } catch (err) {
         console.error("Error fetching products:", err);
         setError("Không thể tải sản phẩm.");
         setProducts([]);
+        setTotalPages(1);
       } finally {
         setLoading(false);
       }
     };
 
     fetchProducts();
-  }, [query, category, type, condition, filters]);
+  }, [query, category, type, condition, filters, page, pageSize]);
 
   useEffect(() => {
     setFilters(f => ({
@@ -100,6 +108,14 @@ const SearchResults = () => {
     "All",
     ...Array.from(new Set(products.map(p => p.brand).filter(Boolean)))
   ];
+
+  const Pagination = ({ page, totalPages, onPageChange }) => (
+    <div style={{ margin: '16px 0', textAlign: 'center' }}>
+      <button onClick={() => onPageChange(page - 1)} disabled={page === 1}>Previous</button>
+      <span style={{ margin: '0 12px' }}>{page} / {totalPages}</span>
+      <button style={{ marginTop: '20px' }} onClick={() => onPageChange(page + 1)} disabled={page === totalPages}>Next</button>
+    </div>
+  );
 
   return (
     <main className={styles.pageContainer}>
@@ -177,16 +193,7 @@ const SearchResults = () => {
             filters={filters}
             products={products}
           />
-          <div className={styles.loadMoreContainer}>
-            <button className={styles.loadMoreButton}>
-              <span className={styles.buttonText}>MORE RESULTS</span>
-              <img
-                src={DoubleRight}
-                alt="Double Right"
-                className={styles.buttonIcon}
-              />
-            </button>
-          </div>
+          <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
           <p className={styles.text}>
             Prices, specifications, availability and terms of offers may change
             without notice. <br />

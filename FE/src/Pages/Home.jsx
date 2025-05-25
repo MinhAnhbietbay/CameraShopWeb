@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./Home.module.css";
-import BestSellers from "../Components/BestSellers";
+// import BestSellers from "../Components/BestSellers";
 import FeaturedProduct1 from "./FeaturedProduct1";
 import FeaturedProduct2 from "./FeaturedProduct2";
 import CategoryGrid from "./CategoryGrid";
@@ -15,7 +15,7 @@ function Home() {
         <img src={banner} alt="banner" />
           </section>
       <div className={styles.div2}>
-        <BestSellers />
+        {/* <BestSellers /> */}
         <NewArrivals />
         <FeaturedProduct1 />
         <FeaturedProduct2 />

@@ -290,19 +290,6 @@ function AdminDashboard() {
                                     </tbody>
                                 </table>
                             </div>
-
-                            {/* Recently Orders */}
-                            <div className={styles.recentOrders}>
-                                <h2>Recent Orders</h2>
-                                <div className={styles.productList}>
-                                    {[1, 2, 3, 4].map((_, index) => (
-                                        <div key={index} className={styles.productCard}>
-                                            <img src={productImage} alt="Product" />
-                                            <span>Canon EOS 90D</span>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </section>
