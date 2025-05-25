@@ -152,9 +152,40 @@ export const updateProductController = async (req: Request, res: Response) => {
             return
         }
 
+        // Parse features nếu là string
+        let features = req.body.features;
+        if (typeof features === 'string') {
+            try {
+                features = JSON.parse(features);
+            } catch {
+                features = [];
+            }
+        }
+        features = Array.isArray(features) ? features : [];
+        // Nếu có ảnh feature upload mới thì xử lý ở đây (nếu cần)
+        if (features.length > 0 && req.files) {
+            features = features.map((feature: any, idx: number) => {
+                const key = `features[${idx}][image]`;
+                if (req.files && key in req.files) {
+                    feature.image = `/uploads/${(req.files as any)[key][0].filename}`;
+                }
+                return feature;
+            });
+        }
+
+        // Parse additionalImages nếu cần (nếu FE gửi dạng file thì xử lý như cũ)
+        let additionalImages = [];
+        if (req.files && 'additionalImages' in req.files) {
+            additionalImages = ((req.files as any)["additionalImages"] as Express.Multer.File[]).map(file => `/uploads/${file.filename}`);
+        } else if (Array.isArray(req.body.additionalImages)) {
+            additionalImages = req.body.additionalImages;
+        }
+
         // Tạo object product với dữ liệu từ request
         const productData = {
             ...req.body,
+            features,
+            additionalImages,
             updatedAt: new Date()
         }
 

@@ -1,6 +1,7 @@
 .productDetails {
   max-width: 1200px;
   padding: 0 80px 80px;
+  margin-left: 20px;
 }
 
 .header {
@@ -17,7 +18,7 @@
 
 .img {
   margin-top: 20px;
-  width: 522px;
+  width: 520px;
   height: auto;
   border-radius: 8px;
 }
@@ -70,7 +71,7 @@ h1 {
 
 /* Phần mô tả sản phẩm */
 .description {
-  margin-top: 10px;
+  margin-top: 0px;
 }
 
 .description div {
@@ -80,7 +81,7 @@ h1 {
 }
 
 .additionalInfo {
-  margin-top: 40px;
+  margin-top: 20px;
   margin-left: 20px;
   font-size: 16px;
   line-height: 1.6;
