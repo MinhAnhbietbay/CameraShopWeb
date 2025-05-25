@@ -1,5 +1,11 @@
 import { ObjectId } from 'mongodb'
 
+interface FeatureType {
+    title: string
+    description: string
+    image: string
+}
+
 interface ProductType {
     _id?: ObjectId
     name: string
@@ -13,6 +19,9 @@ interface ProductType {
     createdAt?: Date
     updatedAt?: Date
     parentCategory?: string
+    additionalImages?: string[]
+    features?: FeatureType[]
+    type?: string
 }
 
 class Product {
@@ -28,6 +37,9 @@ class Product {
     createdAt?: Date
     updatedAt?: Date
     parentCategory?: string
+    additionalImages?: string[]
+    features?: FeatureType[]
+    type?: string
 
     constructor(product: ProductType) {
         const date = new Date()
@@ -43,6 +55,9 @@ class Product {
         this.createdAt = product.createdAt || date
         this.updatedAt = product.updatedAt || date
         this.parentCategory = product.parentCategory
+        this.additionalImages = product.additionalImages || []
+        this.features = product.features || []
+        this.type = product.type
     }
 }
 

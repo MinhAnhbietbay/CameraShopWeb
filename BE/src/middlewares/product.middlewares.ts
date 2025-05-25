@@ -62,6 +62,13 @@ export const addProductValidator = validate(
                     errorMessage: PRODUCTS_MESSAGES.CATEGORY_MUST_BE_STRING
                 },
                 trim: true
+            },
+            type: {
+                optional: true,
+                isString: {
+                    errorMessage: 'Type must be a string'
+                },
+                trim: true
             }
         },
         ['body']

@@ -9,6 +9,7 @@ function AdminAddProduct() {
     price: "",
     description: "",
     category: "",
+    type: "",
     image: null,
     count_in_stock: "",
     sold: 0,
@@ -19,19 +20,46 @@ function AdminAddProduct() {
     specifications: [{ key: "", value: "" }]
   });
 
-  const categories = ["Camera", "Lens", "Accessories", "Other"];
+  const categoryGroups = [
+    {
+      label: "Cameras",
+      value: "cameras",
+      types: [
+        { label: "Digital Camera", value: "digital" },
+        { label: "Film Camera", value: "film" },
+        { label: "Video Cameras", value: "video" }
+      ]
+    },
+    {
+      label: "Accessories",
+      value: "accessories",
+      types: [
+        { label: "Lenses", value: "lenses" },
+        { label: "Tripods", value: "tripods" },
+        { label: "Storage & Editing", value: "storage-editing" }
+      ]
+    },
+    {
+      label: "Lighting & Studio",
+      value: "lighting-studio",
+      types: [
+        { label: "Flashes", value: "flashes" },
+        { label: "Softboxes", value: "softboxes" },
+        { label: "Light Stands", value: "light-stands" },
+        { label: "Studio Backgrounds", value: "studio-backgrounds" }
+      ]
+    }
+  ];
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+    if (name === "category") {
+      setFormData({ ...formData, category: value, type: "" });
+      return;
+    }
     if (name === "price" || name === "count_in_stock") {
-      // Ngăn chặn việc nhập số 0 đầu tiên
-      if (value === "0") {
-        return;
-      }
-      // Ngăn chặn việc nhập dấu - hoặc +
-      if (value.startsWith("-") || value.startsWith("+")) {
-        return;
-      }
+      if (value === "0") return;
+      if (value.startsWith("-") || value.startsWith("+")) return;
     }
     setFormData({ ...formData, [name]: value });
   };
@@ -111,41 +139,72 @@ function AdminAddProduct() {
       form.append("price", Number(formData.price));
       form.append("description", formData.description);
       form.append("category", formData.category);
+      if (formData.type) {
+        form.append("type", formData.type);
+      }
       form.append("brand", formData.brand);
       form.append("count_in_stock", Number(formData.count_in_stock));
       form.append("sold", Number(formData.sold));
       form.append("highlightsSummary", formData.highlightsSummary);
       if (formData.image) form.append("image", formData.image);
-      // Thêm các ảnh phụ
-      formData.additionalImages.forEach((img, idx) => {
-        if (img) form.append(`additionalImages`, img);
+      // Gửi các ảnh phụ
+      formData.additionalImages.forEach((img) => {
+        if (img) form.append('additionalImages', img);
       });
-      // Thêm features
+      // Gửi features (không gửi ảnh trong object)
+      const featuresForServer = formData.features.map(f => ({
+        title: f.title,
+        description: f.description
+      }));
+      form.append('features', JSON.stringify(featuresForServer));
+      // Gửi ảnh cho từng feature
       formData.features.forEach((feature, idx) => {
-        form.append(`features[${idx}][title]`, feature.title);
-        form.append(`features[${idx}][description]`, feature.description);
-        if (feature.image) form.append(`features[${idx}][image]`, feature.image);
+        if (feature.image) {
+          form.append(`features[${idx}][image]`, feature.image);
+        }
       });
-      // Thêm specifications
+      // Gửi specifications
       formData.specifications.forEach((spec, idx) => {
         form.append(`specifications[${idx}][key]`, spec.key);
         form.append(`specifications[${idx}][value]`, spec.value);
       });
 
+      const accessToken = localStorage.getItem("accessToken");
       const response = await axios.post("http://localhost:3000/products/add", form, {
         withCredentials: true,
         headers: {
           "Content-Type": "multipart/form-data",
+          "Authorization": "Bearer " + accessToken
         },
       });
+      console.log(response.data);
       if (response.status !== 200 && response.status !== 201) {
         throw new Error("Failed to add product");
       }
       alert("Sản phẩm đã được thêm thành công!");
       // Có thể reset form hoặc chuyển hướng
     } catch (error) {
+      if (error.response) {
+        console.error("Lỗi chi tiết từ backend:", error.response.data);
+        alert(JSON.stringify(error.response.data));
+      }
       console.error("Error adding product:", error);
       alert("Có lỗi xảy ra khi thêm sản phẩm. Vui lòng thử lại.");
+    }
+  };
+
+  const handleDeleteProduct = async (productId) => {
+    try {
+      const accessToken = localStorage.getItem("accessToken");
+      await axios.delete(`http://localhost:3000/products/${productId}`, {
+        headers: {
+          "Authorization": "Bearer " + accessToken
+        }
+      });
+      alert("Xóa sản phẩm thành công!");
+    } catch (error) {
+      alert("Xóa sản phẩm thất bại!");
+      console.error(error);
     }
   };
 
@@ -206,11 +265,26 @@ function AdminAddProduct() {
                   required
                 >
                   <option value="">Select a category</option>
-                  {categories.map((cat) => (
-                    <option key={cat} value={cat}>{cat}</option>
+                  {categoryGroups.map(group => (
+                    <option key={group.value} value={group.value}>{group.label}</option>
                   ))}
                 </select>
               </div>
+              {formData.category && (
+                <div className={styles.field}>
+                  <label>Type</label>
+                  <select
+                    name="type"
+                    value={formData.type}
+                    onChange={handleInputChange}
+                  >
+                    <option value="">Select type (optional)</option>
+                    {categoryGroups.find(g => g.value === formData.category)?.types.map(opt => (
+                      <option key={opt.value} value={opt.value}>{opt.label}</option>
+                    ))}
+                  </select>
+                </div>
+              )}
               <div className={styles.field}>
                 <label>Product Description<span className={styles.required}>*</span></label>
                 <textarea

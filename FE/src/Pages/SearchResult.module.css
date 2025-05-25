@@ -64,4 +64,10 @@
   margin-top: 20px;
   color: #555;
   font-size: 14px;
+}
+
+.productGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
 } 

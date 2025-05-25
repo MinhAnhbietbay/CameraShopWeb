@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styles from "./FilterBar.module.css";
 import arrowdown from "../assets/icons/arrowdown.svg";
 
-function FilterBar({ category, query, onFilterChange }) {
+function FilterBar({ category, query, onFilterChange, brands = ["All"] }) {
   const [selectedBrand, setSelectedBrand] = useState("All");
   const [sortBy, setSortBy] = useState("default");
 
@@ -23,6 +23,7 @@ function FilterBar({ category, query, onFilterChange }) {
         selectedBrand={selectedBrand}
         onBrandSelect={handleBrandSelect}
         category={category}
+        brands={brands}
       />
     </aside>
   );
@@ -49,9 +50,7 @@ function SortingSection({ sortBy, onSortChange }) {
   );
 }
 
-function FilterSection({ selectedBrand, onBrandSelect, category }) {
-  const brands = ["All", "Canon", "FujiFilm", "Leica", "Sony", "Nikon"];
-
+function FilterSection({ selectedBrand, onBrandSelect, category, brands }) {
   return (
     <section className={styles.filterContainer}>
       <h2 className={styles.sectionTitle}>Filter By</h2>

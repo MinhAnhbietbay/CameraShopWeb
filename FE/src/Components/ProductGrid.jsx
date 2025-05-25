@@ -14,19 +14,18 @@ function ProductGrid({ category, query, filters, products }) {
     let result = [...products];
 
     if (category) {
-      if (category === 'accessories') {
-        // If category is 'accessories', filter by parentCategory
-        result = result.filter(product => 
-          product.parentCategory && product.parentCategory.toLowerCase() === category.toLowerCase()
-        );
-      } else {
-        // Otherwise, filter by category
-        result = result.filter(product => 
-          product.category && product.category.toLowerCase() === category.toLowerCase()
+      result = result.filter(product =>
+        product.category && product.category.toLowerCase() === category.toLowerCase()
+      );
+      // Nếu có type, filter tiếp theo type
+      if (filters?.type) {
+        result = result.filter(product =>
+          product.type && product.type.toLowerCase() === filters.type.toLowerCase()
         );
       }
     }
 
+    // Lọc theo query
     if (query) {
       const searchQuery = query.toLowerCase();
       result = result.filter(product =>
@@ -35,24 +34,21 @@ function ProductGrid({ category, query, filters, products }) {
       );
     }
 
+    // Lọc theo brand
     if (filters?.brand && filters.brand !== "All") {
       result = result.filter(product => 
         product.brand && product.brand === filters.brand
       );
     }
 
-    if (filters?.type) {
-      result = result.filter(product =>
-        product.type && product.type.toLowerCase() === filters.type.toLowerCase()
-      );
-    }
-
+    // Lọc theo condition
     if (filters?.condition) {
       result = result.filter(product =>
         product.condition && product.condition.toLowerCase() === filters.condition.toLowerCase()
       );
     }
 
+    // Sắp xếp
     if (filters?.sortBy) {
       switch (filters.sortBy) {
         case "az":

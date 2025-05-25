@@ -34,7 +34,15 @@ const upload = multer({
 
 // Middleware xử lý lỗi upload
 export const uploadMiddleware = (req: Request, res: any, next: any) => {
-    upload.single('image')(req, res, (err) => {
+    upload.fields([
+        { name: 'image', maxCount: 1 },
+        { name: 'additionalImages', maxCount: 10 },
+        // Cho phép tối đa 10 feature, mỗi feature 1 ảnh
+        ...Array.from({ length: 10 }).map((_, i) => ({
+            name: `features[${i}][image]`,
+            maxCount: 1
+        }))
+    ])(req, res, (err) => {
         if (err instanceof multer.MulterError) {
             if (err.code === 'LIMIT_FILE_SIZE') {
                 return res.status(400).json({

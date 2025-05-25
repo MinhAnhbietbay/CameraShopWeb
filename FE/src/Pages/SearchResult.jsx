@@ -36,9 +36,11 @@ const SearchResults = () => {
           category: category,
           type: type,
           condition: condition,
-          brand: brand,
           ...filters
         };
+        if (filters.brand === "All") {
+          delete params.brand;
+        }
         const response = await productApi.getAll(params);
         if (response.data && response.data.result) {
           setProducts(response.data.result.products);
@@ -55,7 +57,16 @@ const SearchResults = () => {
     };
 
     fetchProducts();
-  }, [query, category, type, condition, brand, filters]);
+  }, [query, category, type, condition, filters]);
+
+  useEffect(() => {
+    setFilters(f => ({
+      ...f,
+      brand: brand || "All",
+      type: type || "",
+      condition: condition || ""
+    }));
+  }, [brand, type, condition]);
 
   const handleFilterChange = (newFilters) => {
     setFilters(newFilters);
@@ -77,6 +88,11 @@ const SearchResults = () => {
     }
     return query ? `SEARCH RESULTS FOR "${query.toUpperCase()}"` : "SEARCH RESULTS";
   };
+
+  const brandList = [
+    "All",
+    ...Array.from(new Set(products.map(p => p.brand).filter(Boolean)))
+  ];
 
   return (
     <main className={styles.pageContainer}>
@@ -117,9 +133,9 @@ const SearchResults = () => {
         {brand && condition !== 'used' && (
           <>
             <span>/</span>
-            <Link to={`/search?${query ? `query=${query}&` : category ? `category=${category}&` : 'category=products&'}brand=${brand}`} className={styles.breadcrumbLink}>
+            <span className={styles.breadcrumbBrand}>
               {brand.charAt(0).toUpperCase() + brand.slice(1)}
-            </Link>
+            </span>
           </>
         )}
         {type && condition !== 'used' && (
@@ -145,6 +161,7 @@ const SearchResults = () => {
           category={category} 
           query={query} 
           onFilterChange={handleFilterChange}
+          brands={brandList}
         />
         <div className={styles.mainContent}>
           <ProductGrid 

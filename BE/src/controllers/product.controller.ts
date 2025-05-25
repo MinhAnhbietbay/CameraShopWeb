@@ -5,42 +5,65 @@ import path from 'path'
 
 export const addController = async (req: Request, res: Response) => {
     try {
-        if (!req.file) {
-            res.status(400).json({
-                errors: {
-                    image: {
-                        msg: 'Image is required'
-                    }
-                }
-            })
-            return
+        // 1. Ảnh chính
+        if (!req.files || !("image" in req.files)) {
+            return res.status(400).json({ errors: { image: { msg: 'Image is required' } } });
+        }
+        const imageFile = (req.files as any)["image"][0];
+        const imageUrl = `/uploads/${imageFile.filename}`;
+
+        // 2. Ảnh phụ
+        const additionalImages: string[] = [];
+        if ("additionalImages" in req.files) {
+            ((req.files as any)["additionalImages"] as Express.Multer.File[]).forEach(file => {
+                additionalImages.push(`/uploads/${file.filename}`);
+            });
         }
 
-        // Lấy đường dẫn ảnh từ file đã upload
-        const imageUrl = `/uploads/${req.file.filename}`
+        // 3. Features (có ảnh)
+        let features: any[] = [];
+        if (req.body.features) {
+            // Nếu FE gửi dạng JSON string
+            if (typeof req.body.features === 'string') {
+                features = JSON.parse(req.body.features);
+            } else {
+                features = req.body.features;
+            }
+            // Gán ảnh cho từng feature nếu có
+            features = features.map((feature: any, idx: number) => {
+                const key = `features[${idx}][image]`;
+                if (req.files && key in req.files) {
+                    feature.image = `/uploads/${(req.files as any)[key][0].filename}`;
+                }
+                return feature;
+            });
+        }
 
-        // Tạo object product với dữ liệu từ request
+        // 4. Tạo object sản phẩm
         const productData = {
             ...req.body,
             sold: 0,
             image: imageUrl,
+            additionalImages,
+            features,
             createdAt: new Date(),
-            updatedAt: new Date()
-        }
+            updatedAt: new Date(),
+            type: req.body.type
+        };
 
-        const result = await productService.addProduct(productData)
+        const result = await productService.addProduct(productData);
         res.json({
             message: 'Product added successfully',
             result
-        })
+        });
     } catch (error) {
-        console.error('Error adding product:', error)
+        console.error('Error adding product:', error);
         res.status(500).json({
             message: 'Error adding product',
             error: error instanceof Error ? error.message : 'Unknown error'
-        })
+        });
     }
-}
+};
 
 //gộp
 // export const getProductsController = async (req: Request, res: Response) => {

@@ -95,8 +95,19 @@ function ProductTable() {
   });
 
   const handleDeleteProduct = async (productId) => {
-    // Gọi API xóa sản phẩm ở đây nếu cần
-    setProducts(products.filter((product) => product._id !== productId));
+    try {
+      const accessToken = localStorage.getItem("accessToken");
+      await axios.delete(`http://localhost:3000/products/${productId}`, {
+        headers: {
+          "Authorization": "Bearer " + accessToken
+        }
+      });
+      setProducts(products.filter((product) => product._id !== productId));
+      alert("Xóa sản phẩm thành công!");
+    } catch (error) {
+      alert("Xóa sản phẩm thất bại!");
+      console.error(error);
+    }
   };
 
   // Hàm đổi sort

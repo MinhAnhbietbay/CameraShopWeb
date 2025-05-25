@@ -31,29 +31,29 @@ const menuData = {
       Accessories: {
         link: "/search?category=accessories", // Link cho Accessories
         subItems: {
-          "Lenses": "/search?category=lenses",
-          Tripods: "/search?category=tripods",
-          "Storage & Editing": "/search?category=storage-editing",
+          "Lenses": "/search?category=accessories&type=lenses",
+          "Tripods": "/search?category=accessories&type=tripods",
+          "Storage & Editing": "/search?category=accessories&type=storage-editing",
         },
       },
       "Lighting & Studio": {
         link: "/search?category=lighting-studio", 
         subItems: {
-          Flashes: "/search?category=flashes",
-          Softboxes: "/search?category=softboxes",
-          "Light Stands": "/search?category=light-stands",
-          "Studio Backgrounds": "/search?category=studio-backgrounds",
+          Flashes: "/search?category=lighting-studio&type=flashes",
+          Softboxes: "/search?category=lighting-studio&type=softboxes",
+          "Light Stands": "/search?category=lighting-studio&type=light-stands",
+          "Studio Backgrounds": "/search?category=lighting-studio&type=studio-backgrounds",
         },
       },
     },
   },
-  Brands: {
-    link: "/search", 
-    subItems: ["Canon", "FujiFilm", "Leica", "Sony", "Nikon"].map((brand) => ({
-      label: brand,
-      link: `/search?brand=${brand.toLowerCase()}`,
-    })),
-  },
+  // Brands: {
+  //   link: "/search", 
+  //   subItems: ["Canon", "FujiFilm", "Leica", "Sony", "Nikon"].map((brand) => ({
+  //     label: brand,
+  //     link: `/search?brand=${brand.toLowerCase()}`,
+  //   })),
+  // },
   Used: {
     link: "/search?condition=used",
     subItems: ["Used Cameras", "Used Lenses", "Used Accessories"].map((item) => ({
