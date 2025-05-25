@@ -23,7 +23,7 @@ function NavigationItem({ text, link }) {
           <nav className={styles.navigationList}>
             <NavigationItem text="My profiles" link="/account" />
             <NavigationItem text="My order" link="/account/order" />
-            <NavigationItem text="Change password" link="/account/change-password" />
+            {/* <NavigationItem text="Change password" link="/account/change-password" /> */}
           </nav>
         </section>
       </>

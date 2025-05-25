@@ -44,7 +44,46 @@ class CartService {
     }
 
     async getCart(user_id: ObjectId, page: number = 1, pageSize: number = 10) {
-        const cart = await databaseService.carts.findOne({ user_id })
+        // Sử dụng aggregate để join sang collection products, ép kiểu product_id
+        const carts = await databaseService.carts.aggregate([
+            { $match: { user_id } },
+            { $unwind: "$items" },
+            {
+                $addFields: {
+                    "items.product_id": {
+                        $cond: [
+                            { $eq: [ { $type: "$items.product_id" }, "objectId" ] },
+                            "$items.product_id",
+                            { $toObjectId: "$items.product_id" }
+                        ]
+                    }
+                }
+            },
+            {
+                $lookup: {
+                    from: "products",
+                    localField: "items.product_id",
+                    foreignField: "_id",
+                    as: "productInfo"
+                }
+            },
+            { $unwind: "$productInfo" },
+            {
+                $group: {
+                    _id: "$_id",
+                    user_id: { $first: "$user_id" },
+                    items: {
+                        $push: {
+                            product_id: "$items.product_id",
+                            quantity: "$items.quantity",
+                            product: "$productInfo"
+                        }
+                    },
+                    updatedAt: { $first: "$updatedAt" }
+                }
+            }
+        ]).toArray();
+        const cart = carts[0];
         if (!cart) {
             return {
                 items: [],
@@ -56,10 +95,8 @@ class CartService {
                 }
             }
         }
-
-        const skip = (page - 1) * pageSize
-        const items = cart.items.slice(skip, skip + pageSize)
-
+        const skip = (page - 1) * pageSize;
+        const items = cart.items.slice(skip, skip + pageSize);
         return {
             items,
             pagination: {

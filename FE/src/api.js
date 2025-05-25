@@ -37,9 +37,10 @@ export const cartApi = {
 
 // Order APIs
 export const orderApi = {
-    createOrder: () => api.get('/orders/create-order'),
+    createOrder: (data) => api.post('/orders/create-order', data),
     getOrders: (params) => api.get('/orders/order-list', { params }),
     getMyOrders: () => api.get('/orders/my-orders'),
+    updateOrderStatus: (orderId, status) => api.put(`/orders/${orderId}`, { status }),
 };
 
 // Auth APIs
@@ -48,6 +49,7 @@ export const authApi = {
     login: (data) => api.post('/auth/login', data),
     logout: () => api.post('/auth/logout'),
     updateUserInfo: (data) => api.put('/users/update-address', data),
+    changePassword: (data) => api.put('/auth/change-password', data),
 };
 
 export default api; 

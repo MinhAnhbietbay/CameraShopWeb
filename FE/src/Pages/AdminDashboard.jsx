@@ -15,13 +15,12 @@ import {
     Legend,
 } from 'chart.js';
 import { orderApi } from '../api';
+import { productApi } from '../api';
 
 import productImage from "../assets/images/C90d.jpg";
 import total from "../assets/icons/total.svg";
 import revenue from "../assets/icons/revenue.svg";
 import products from "../assets/icons/products.svg";
-import deleteIcon from "../assets/icons/deleteIcon.svg";
-import star from "../assets/icons/star.svg";
 
 // Đăng ký các components cần thiết cho Chart.js
 ChartJS.register(
@@ -45,6 +44,8 @@ function AdminDashboard() {
         topProducts: [],
     });
 
+    console.log('AdminDashboard rendering. orderStats.topProducts:', orderStats.topProducts);
+
     const [tasks, setTasks] = useState([
         { text: "Update product A", starred: false },
         { text: "Update product B", starred: false },
@@ -52,40 +53,83 @@ function AdminDashboard() {
         { text: "Update product D", starred: false }
     ]);
 
+    const [productCount, setProductCount] = useState(0);
+
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await orderApi.getOrders();
-                processOrderData(response.data);
+                const orderRes = await orderApi.getOrders();
+                console.log('Order API response data (in useEffect):', orderRes.data);
+                processOrderData(orderRes.data);
+
+                // Fetch total products
+                const productRes = await productApi.getAll();
+                setProductCount(productRes.data?.result?.products?.length || 0);
+
             } catch (error) {
                 console.error('Error fetching dashboard data:', error);
+                setProductCount(0);
             }
         };
-
         fetchData();
     }, []);
 
-    const processOrderData = (orders) => {
+    const processOrderData = (data) => {
+        // Đảm bảo orders là một mảng
+        const orders = data?.result?.orders || [];
+        if (!Array.isArray(orders)) {
+            console.error('Orders data is not an array:', orders);
+            return;
+        }
+
         const ordersByStatus = {};
         const revenueByMonth = new Array(12).fill(0);
         const productSales = {};
 
         orders.forEach(order => {
-            ordersByStatus[order.status] = (ordersByStatus[order.status] || 0) + 1;
+            // Xử lý trạng thái đơn hàng
+            const status = order.status || 'pending';
+            ordersByStatus[status] = (ordersByStatus[status] || 0) + 1;
+
+            // Xử lý doanh thu theo tháng
             const month = new Date(order.createdAt).getMonth();
-            revenueByMonth[month] += order.totalAmount;
-            order.items.forEach(item => {
-                productSales[item.product.name] = (productSales[item.product.name] || 0) + item.quantity;
-            });
+            revenueByMonth[month] += order.total_amount || 0;
+
+            // Xử lý sản phẩm bán chạy
+            if (Array.isArray(order.items)) {
+                order.items.forEach(item => {
+                    // Use product_id directly
+                    const productId = item.product_id;
+                    if (productId) {
+                         productSales[productId] = (productSales[productId] || 0) + (item.quantity || 0);
+                    }
+                });
+            }
         });
 
+        console.log('productSales before calculating topProducts:', productSales);
+
+        // Convert productSales object to an array of { id, quantity } objects
         const topProducts = Object.entries(productSales)
-            .sort(([, a], [, b]) => b - a)
-            .slice(0, 5);
+            .map(([id, quantity]) => ({
+                id: id, // Product ID
+                quantity: quantity // Total quantity sold
+            }))
+            .sort((a, b) => b.quantity - a.quantity)
+            .slice(0, 5); // Get top 5
+
+        console.log('Calculated topProducts:', topProducts);
 
         setOrderStats({
             totalOrders: orders.length,
-            totalRevenue: orders.reduce((sum, order) => sum + order.totalAmount, 0),
+            totalRevenue: orders.reduce((sum, order) => sum + (order.total_amount || 0), 0),
+            ordersByStatus,
+            revenueByMonth,
+            topProducts,
+        });
+        console.log('Order Stats after processing (in processOrderData):', {
+            totalOrders: orders.length,
+            totalRevenue: orders.reduce((sum, order) => sum + (order.total_amount || 0), 0),
             ordersByStatus,
             revenueByMonth,
             topProducts,
@@ -110,10 +154,10 @@ function AdminDashboard() {
 
     // Cấu hình biểu đồ doanh thu theo tháng
     const revenueData = {
-        labels: ['T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'T8', 'T9', 'T10', 'T11', 'T12'],
+        labels: ['M1', 'M2', 'M3', 'M4', 'M5', 'M6', 'M7', 'M8', 'M9', 'M10', 'M11', 'M12'],
         datasets: [
             {
-                label: 'Doanh thu (VNĐ)',
+                label: 'Revenue',
                 data: orderStats.revenueByMonth,
                 borderColor: 'rgb(75, 192, 192)',
                 tension: 0.1,
@@ -139,11 +183,11 @@ function AdminDashboard() {
 
     // Cấu hình biểu đồ sản phẩm bán chạy
     const topProductsData = {
-        labels: orderStats.topProducts.map(([name]) => name),
+        labels: Array.isArray(orderStats.topProducts) ? orderStats.topProducts.map((product) => product.id) : [],
         datasets: [
             {
-                label: 'Số lượng bán',
-                data: orderStats.topProducts.map(([, quantity]) => quantity),
+                label: 'Units Sold',
+                data: Array.isArray(orderStats.topProducts) ? orderStats.topProducts.map((product) => product.quantity) : [],
                 backgroundColor: 'rgba(54, 162, 235, 0.5)',
             },
         ],
@@ -172,7 +216,7 @@ function AdminDashboard() {
                         <div className={styles.insightCard}>
                             <div className={styles.insightContent}>
                                 <span>Total Revenue</span>
-                                <h2>{orderStats.totalRevenue.toLocaleString('vi-VN')} VNĐ</h2>
+                                <h2>${orderStats.totalRevenue.toLocaleString('en-US')}</h2>
                             </div>
                             <div className={styles.insightIcon}>
                                 <img src={revenue} alt="Total Revenue" />
@@ -181,7 +225,7 @@ function AdminDashboard() {
                         <div className={styles.insightCard}>
                             <div className={styles.insightContent}>
                                 <span>Total Products</span>
-                                <h2>200</h2>
+                                <h2>{productCount}</h2>
                             </div>
                             <div className={styles.insightIcon}>
                                 <img src={products} alt="Total Products" />
@@ -192,17 +236,34 @@ function AdminDashboard() {
                     {/* Biểu đồ thống kê */}
                     <div className={styles.chartsSection}>
                         <div className={styles.chartContainer}>
-                            <h2>Doanh thu theo tháng</h2>
+                            <h2>Monthly Revenue</h2>
                             <Line data={revenueData} />
                         </div>
                         <div className={styles.chartContainer}>
-                            <h2>Trạng thái đơn hàng</h2>
+                            <h2>Order Status</h2>
                             <Pie data={statusData} />
                         </div>
-                        <div className={styles.chartContainer}>
-                            <h2>Top sản phẩm bán chạy</h2>
-                            <Bar data={topProductsData} />
-                        </div>
+                        {/* Removed incorrectly placed commented-out Best-Selling Products table */}
+                        {/* <div className={styles.chartContainer}> 
+                            <h2>Best-Selling Products</h2>
+                            <table className={styles.bestSellingTable}> 
+                                <thead>
+                                    <tr>
+                                        <th>Product ID</th> 
+                                        <th>Units Sold</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {console.log('Rendering Best-Selling Products table. orderStats.topProducts:', orderStats.topProducts)} 
+                                    {Array.isArray(orderStats.topProducts) && orderStats.topProducts.map((product, index) => (
+                                        <tr key={index} className={styles.bestSellingTableRow}> 
+                                            <td>{product.id}</td> 
+                                            <td>{product.quantity}</td> 
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div> */}
                     </div>
 
                     <div className={styles.productsAndTodo}>
@@ -210,14 +271,24 @@ function AdminDashboard() {
                             {/* Best-Selling Products */}
                             <div className={styles.bestSelling}>
                                 <h2>Best-Selling Products</h2>
-                                <div className={styles.productList}>
-                                    {[1, 2, 3, 4].map((_, index) => (
-                                        <div key={index} className={styles.productCard}>
-                                            <img src={productImage} alt="Product" />
-                                            <span>Canon EOS 90D</span>
-                                        </div>
-                                    ))}
-                                </div>
+                                <table className={styles.bestSellingTable}> 
+                                    <thead>
+                                        <tr>
+                                            <th>Product ID</th> 
+                                            <th>Units Sold</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {/* console.log('Rendering Best-Selling Products table. orderStats.topProducts:', orderStats.topProducts) */}
+                                        {/* Map through topProducts data - ensure it's an array */}
+                                        {Array.isArray(orderStats.topProducts) && orderStats.topProducts.map((product, index) => (
+                                            <tr key={index} className={styles.bestSellingTableRow}> 
+                                                <td>{product.id}</td> 
+                                                <td>{product.quantity}</td> 
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
                             </div>
 
                             {/* Recently Orders */}

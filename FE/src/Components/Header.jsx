@@ -214,7 +214,7 @@ const IconGroup = ({ isLoggedIn, setIsLoggedIn }) => {
         {isLoggedIn && showMenu && (
           <ul className={styles.userdropdownList}>
             <li className={styles.userdropdownItem}>
-              <Link to="/account" className={styles.usermenuBtn}>
+              <Link to="/account" className={styles.usermenuBtn} onClick={() => setShowMenu(false)}>
                 My Account
               </Link>
             </li>

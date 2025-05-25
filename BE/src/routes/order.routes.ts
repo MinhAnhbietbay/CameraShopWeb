@@ -3,6 +3,7 @@ import {
     createOrderController,
     getOrderListController,
     getOrderListByUserIdController,
+    getMyOrdersForUserController,
     updateOrderStatusController,
     deleteOrderController
 } from '~/controllers/order.controller'
@@ -14,29 +15,40 @@ const orderRouter = Router()
 /**
  * Description: Create order
  * Path: /create-order
- * Method: GET
+ * Method: POST
  */
-orderRouter.get('/create-order', accessTokenValidator, wrapRequestHandler(createOrderController))
+orderRouter.post('/create-order', accessTokenValidator, wrapRequestHandler(createOrderController))
 
 /**
- * Description: Get order list (Admin)
+ * Description: Get ALL orders (Admin only)
  * Path: /order-list
  * Method: GET
  * Query: { page: number, pageSize: number }
+ * Middleware: authorizeadmin
  */
 orderRouter.get('/order-list', accessTokenValidator, authorizeadmin, wrapRequestHandler(getOrderListController))
 
 /**
- * Description: Get order by user_id
+ * Description: Get orders by specific user_id (Admin only)
  * Path: /order-list/:user_id
  * Method: GET
  * Query: { page: number, pageSize: number }
+ * Middleware: authorizeadmin
  */
-orderRouter.get('/order-list/:user_id', accessTokenValidator, wrapRequestHandler(getOrderListByUserIdController))
+orderRouter.get('/order-list/:user_id', accessTokenValidator, authorizeadmin, wrapRequestHandler(getOrderListByUserIdController))
+
+/**
+ * Description: Get orders for the authenticated user (Regular User)
+ * Path: /my-orders
+ * Method: GET
+ * Query: { page: number, pageSize: number }
+ * Middleware: accessTokenValidator (to get user_id from token)
+ */
+orderRouter.get('/my-orders', accessTokenValidator, wrapRequestHandler(getMyOrdersForUserController))
 
 /**
  * Description: Update order status (Admin)
- * Path: /order-list/:order_id
+ * Path: /:order_id
  * Method: PUT
  */
 orderRouter.put('/:order_id', accessTokenValidator, authorizeadmin, wrapRequestHandler(updateOrderStatusController))

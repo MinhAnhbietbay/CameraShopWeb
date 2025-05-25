@@ -54,24 +54,65 @@
   font-weight: bold;
   cursor: pointer;
   text-align: center;
-  transition: background-color 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .tabButton:hover {
   background-color: #f0f0f0;
 }
 
+.tabButton.activeTab {
+  background-color: #007bff;
+  color: #fff;
+  border-color: #007bff;
+}
+
 .details {
   background-color: #fff;
   border-radius: 8px;
   padding: 20px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  margin-bottom: 30px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  margin-bottom: 25px;
+  border: 1px solid #e0e0e0;
+  display: flex;
+  flex-direction: column;
+}
+
+.orderHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #eee;
+}
+
+.orderHeader h3 {
+  font-size: 18px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.orderHeader .status {
+  padding: 5px 15px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: bold;
+  text-align: center;
 }
 
 .productsOrdered {
   font-size: 18px;
   font-weight: bold;
+  margin-bottom: 15px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+}
+
+.productList {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
   margin-bottom: 20px;
 }
 
@@ -79,25 +120,25 @@
   display: flex;
   align-items: center;
   gap: 15px;
-  padding: 10px;
+  padding: 15px;
   background-color: #f9f9f9;
   border-radius: 8px;
-  border: 1px solid #ddd;
-  margin-bottom: 15px;
+  border: 1px solid #eee;
 }
 
 .productInfo {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 15px;
   flex: 2;
 }
 
 .productImage {
-  width: 60px;
-  height: 60px;
+  width: 70px;
+  height: 70px;
   object-fit: cover;
   border-radius: 4px;
+  border: 1px solid #ddd;
 }
 
 .productName {
@@ -108,9 +149,9 @@
 .productPrice,
 .productQuantity,
 .productTotalPrice {
-  flex: 1;
-  text-align: center;
-  font-size: 14px;
+  flex: 0.7;
+  text-align: right;
+  font-size: 15px;
   font-weight: bold;
 }
 
@@ -118,30 +159,89 @@
   color: #28a745;
 }
 
+.productQuantity {
+  flex: 0.5;
+}
+
 .summaryContainer {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
-  padding: 10px;
-  border-top: 1px solid #ddd;
-  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px solid #eee;
+  margin-top: 15px;
+  gap: 20px;
 }
 
 .orderTotal h4 {
-  font-size: 16px;
+  font-size: 18px;
   font-weight: bold;
+  margin: 0;
 }
 
 .totalPrice {
-  font-size: 24px;
+  font-size: 26px;
   font-weight: bold;
   color: #28a745;
+}
+
+/* Status badges - ensure colors and styles are consistent */
+.status {
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+  min-width: 80px;
+  display: inline-block;
+}
+
+.pending {
+  background-color: #ffc107;
+  color: #343a40;
+}
+
+.confirmed {
+  background-color: #17a2b8;
+  color: #fff;
+}
+
+.shipped {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.delivered {
+  background-color: #28a745;
+  color: #fff;
+}
+
+.cancelled {
+  background-color: #dc3545;
+  color: #fff;
+}
+
+/* Adjusting filter button styles slightly for better active state */
+.tabButton {
+  transition: all 0.3s ease;
+}
+
+.tabButton.activeTab {
+  background-color: #007bff;
+  color: #fff;
+  border-color: #007bff;
+}
+
+.noOrdersMessage {
+  text-align: center;
+  font-size: 18px;
+  color: #666;
+  margin-top: 30px;
 }
 
 /* Trạng thái đơn hàng */
 .all {
   border-radius: 20px;
-
 }
 .completed {
   background-color: #AEEEEE;
@@ -171,4 +271,31 @@
   font-size: 14px;
   font-weight: bold;
   text-align: center;
+}
+
+/* Basic table styles for order list */
+.orderTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.orderTable th,
+.orderTable td {
+  border: 1px solid #ddd;
+  padding: 12px;
+  text-align: left;
+}
+
+.orderTable th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
+
+.orderTableRow:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.orderTableRow:hover {
+  background-color: #e9e9e9;
 }

@@ -4,9 +4,20 @@ import { ObjectId } from 'mongodb'
 
 class ProductService {
     async addProduct(product: Product) {
-        const result = await databaseService.products.insertOne(product)
-        const product_id = result.insertedId.toString()
-        return product_id
+        // Đảm bảo trường sold luôn là number
+        let sold = 0;
+        if (typeof product.sold === 'number') {
+            sold = product.sold;
+        } else if (typeof product.sold === 'string') {
+            sold = parseInt(product.sold) || 0;
+        }
+        const productToInsert = {
+            ...product,
+            sold
+        };
+        const result = await databaseService.products.insertOne(productToInsert);
+        const product_id = result.insertedId.toString();
+        return product_id;
     }
 
     // async getProducts(page: number = 1, pageSize: number = 10) {
@@ -112,6 +123,14 @@ class ProductService {
 
     async updateProductQuantity(product_id: ObjectId, quantity: number) {
         try {
+            const product = await databaseService.products.findOne({ _id: product_id });
+            console.log('updateProductQuantity - product:', product, 'quantity:', quantity);
+            if (!product) {
+                throw new Error('Product not found');
+            }
+            if (product.count_in_stock < quantity) {
+                throw new Error('Not enough stock');
+            }
             const result = await databaseService.products.updateOne(
                 { _id: product_id },
                 {
@@ -120,10 +139,14 @@ class ProductService {
                         sold: quantity
                     }
                 }
-            )
-            return result
+            );
+            if (result.modifiedCount === 0) {
+                throw new Error('Error updating product quantity (no document modified)');
+            }
+            return result;
         } catch (error) {
-            throw new Error('Error updating product quantity')
+            console.error('updateProductQuantity error:', error);
+            throw new Error(typeof error === 'object' && error && 'message' in error ? (error as any).message : String(error) || 'Error updating product quantity');
         }
     }
 }

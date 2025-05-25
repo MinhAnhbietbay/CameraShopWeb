@@ -1,25 +1,23 @@
 import React from "react";
 import styles from "./AddToCartButton.module.css";
 import add from "../assets/icons/add.svg";
+import { cartApi } from "../api";
 
 function AddToCartButton({ product }) {
-  const handleAddToCart = () => {
+  const handleAddToCart = async () => {
     const accessToken = localStorage.getItem('accessToken');
     if (!accessToken) {
       alert('You must log in to add products to your cart!');
       // window.location.href = '/login';
       return;
     }
-    // Add to cart in localStorage
-    let cart = JSON.parse(localStorage.getItem('cart')) || [];
-    const index = cart.findIndex(item => item._id === product._id);
-    if (index > -1) {
-      cart[index].quantity += 1;
-    } else {
-      cart.push({ ...product, quantity: 1 });
+    try {
+      await cartApi.addToCart({ product_id: product._id, quantity: 1 });
+      alert('Added to cart!');
+      // Optionally: cập nhật lại localStorage cart nếu muốn đồng bộ FE/BE
+    } catch (err) {
+      alert('Failed to add to cart!');
     }
-    localStorage.setItem('cart', JSON.stringify(cart));
-    alert('Added to cart!');
   };
 
   return (

@@ -200,3 +200,38 @@
 .divider {
     display: none !important;
 }
+
+/* Styles for Best-Selling Products table */
+.bestSellingTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+
+.bestSellingTable th,
+.bestSellingTable td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+    font-size: 0.9rem; /* Adjust font size */
+}
+
+.bestSellingTable th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+.bestSellingTableRow:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.bestSellingTableRow:hover {
+    background-color: #e9e9e9;
+}
+
+.productImage {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 4px;
+}

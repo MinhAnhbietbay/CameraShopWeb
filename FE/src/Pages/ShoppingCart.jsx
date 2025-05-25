@@ -2,9 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import OrderSummary from "./OrderSummary";
 import styles from "./ShoppingCart.module.css";
+import { cartApi } from "../api";
 
-import image from "../assets/images/Sa7.png";
-import image1 from "../assets/images/C90d.jpg";
 
 // Component QuantitySelector
 function QuantitySelector({ quantity, onQuantityChange, max }) {
@@ -91,8 +90,24 @@ function ShoppingCart() {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    const cart = JSON.parse(localStorage.getItem('cart')) || [];
-    setProducts(cart);
+    async function fetchCart() {
+      try {
+        const res = await cartApi.getCart();
+        // Nếu BE trả về items là [{product_id, quantity, product: {...}}]
+        setProducts(
+          (res.data.result.items || []).map(item => ({
+            ...(item.product || {}),
+            quantity: item.quantity,
+            _id: item.product_id || (item.product && item.product._id),
+            price: item.product?.price || 0,
+            image: item.product?.image || ""
+          }))
+        );
+      } catch (err) {
+        setProducts([]);
+      }
+    }
+    fetchCart();
   }, []);
 
   const handleRemoveProduct = (productId) => {

@@ -73,7 +73,58 @@ class OrderService {
     async getOrderList(page: number = 1, pageSize: number = 10) {
         const skip = (page - 1) * pageSize
         const [orders, total] = await Promise.all([
-            databaseService.orders.find({}).skip(skip).limit(pageSize).toArray(),
+            databaseService.orders
+                .aggregate([
+                    {
+                        $lookup: {
+                            from: 'products',
+                            localField: 'items.product_id',
+                            foreignField: '_id',
+                            as: 'productDetails'
+                        }
+                    },
+                    {
+                        $addFields: {
+                            items: {
+                                $map: {
+                                    input: '$items',
+                                    as: 'item',
+                                    in: {
+                                        $mergeObjects: [
+                                            '$$item',
+                                            {
+                                                product: {
+                                                    $arrayElemAt: [
+                                                        {
+                                                            $filter: {
+                                                                input: '$productDetails',
+                                                                as: 'product',
+                                                                cond: { $eq: ['$$product._id', '$$item.product_id'] }
+                                                            }
+                                                        },
+                                                        0
+                                                    ]
+                                                }
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    {
+                        $project: {
+                            productDetails: 0
+                        }
+                    },
+                    {
+                        $skip: skip
+                    },
+                    {
+                        $limit: pageSize
+                    }
+                ])
+                .toArray(),
             databaseService.orders.countDocuments({})
         ])
         return {
@@ -88,7 +139,7 @@ class OrderService {
     }
 
     async getOrderListByUserId(user_id: string, page: number = 1, pageSize: number = 10) {
-        const skip = (page - 1) * pageSize
+        const skip = (page - 1) * pageSize;
         const [orders, total] = await Promise.all([
             databaseService.orders
                 .find({ user_id: new ObjectId(user_id) })
@@ -96,7 +147,7 @@ class OrderService {
                 .limit(pageSize)
                 .toArray(),
             databaseService.orders.countDocuments({ user_id: new ObjectId(user_id) })
-        ])
+        ]);
         return {
             orders,
             pagination: {
@@ -105,7 +156,7 @@ class OrderService {
                 total,
                 totalPages: Math.ceil(total / pageSize)
             }
-        }
+        };
     }
 
     async updateOrderStatus(

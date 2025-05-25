@@ -42,8 +42,15 @@ const SearchResults = () => {
           delete params.brand;
         }
         const response = await productApi.getAll(params);
-        if (response.data && response.data.result) {
-          setProducts(response.data.result.products);
+        if (response.data && response.data.result && Array.isArray(response.data.result.products)) {
+          // Sort products by createdAt in descending order (newest first)
+          const sortedProducts = response.data.result.products.sort((a, b) => {
+            // Handle cases where createdAt might be missing or null
+            const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0; // Use 0 if createdAt is missing
+            const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0; // Use 0 if createdAt is missing
+            return dateB - dateA; // Sort descending
+          });
+          setProducts(sortedProducts);
         } else {
           setProducts([]);
         }

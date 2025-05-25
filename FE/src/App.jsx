@@ -14,6 +14,7 @@ import AboutUs from "./Pages/AboutUs";
 import SearchResults from "./Pages/SearchResult";
 import ProductDetails from "./Pages/ProductDetails";
 import MyOrder from "./Pages/MyOrder";
+import ChangePassword from "./Pages/ChangePassword";
 import AdminHeader from "./Components/AdminHeader";
 import AdminDashboard from "./Pages/AdminDashboard";
 import AdminProducts from "./Pages/AdminProducts";
@@ -79,6 +80,7 @@ function App() {
         <Route path="/cart" element={<ShoppingCart />} />
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/account/order" element={<MyOrder />} />
+        <Route path="/account/change-password" element={isLoggedIn ? <ChangePassword /> : <Navigate to="/login" replace />} />
         <Route 
           path="/products/:category/:productId" 
           element={<ProductDetails cartProducts={cartProducts} setCartProducts={setCartProducts} />} 

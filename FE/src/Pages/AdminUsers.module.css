@@ -40,10 +40,15 @@
     color: #495057;
 }
 
+.tableHeader > div:nth-child(3), /* Address */
+.tableHeader > div:nth-child(5), /* Email */
+.tableHeader > div:nth-child(8) /* Role */ {
+  text-align: center;
+}
+
 .sortableHeader {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
     cursor: pointer;
     user-select: none;
 }
@@ -56,6 +61,7 @@
     width: 16px;
     height: 16px;
     transition: transform 0.2s ease;
+
 }
 
 .sortDesc {
@@ -82,6 +88,11 @@
     text-overflow: ellipsis;
     white-space: nowrap;
 }
+
+.orders, .totalSpent, .role, .action, .phone {
+  text-align: center;
+}
+
 
 .emailLink {
     color: #007bff;
@@ -114,11 +125,6 @@
     height: 20px;
 }
 
-.orders, .totalSpent {
-    text-align: right;
-    font-weight: 500;
-}
-
 .ordersHeader, .totalSpentHeader {
     text-align: right;
 }
@@ -140,7 +146,7 @@
 }
 
 .roleEdit select {
-    padding: 0.25rem;
+    padding: 0.5rem;
     border: 1px solid #ced4da;
     border-radius: 4px;
     background-color: white;

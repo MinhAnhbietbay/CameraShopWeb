@@ -1,111 +1,153 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
 import styles from "./AdminOrders.module.css";
 import AdminPanel from "../Components/AdminPanel";
+import { orderApi } from "../api";
+import sortIcon from "../assets/icons/sortIcon.svg";
 
-import arrowdown from "../assets/icons/arrowdown.svg";
-function OrderRow({ order, onStatusChange }) {
-  const [isEditing, setIsEditing] = useState(false); // Trạng thái để kiểm soát hiển thị dropdown
+const STATUS_OPTIONS = [
+  "pending",
+  "confirmed",
+  "shipped",
+  "delivered",
+  "cancelled"
+];
 
-  const handleStatusChange = (e) => {
-    onStatusChange(order.id, e.target.value); // Gọi hàm thay đổi trạng thái
-    setIsEditing(false);
-  };
-
+function OrderDetail({ order, onClose }) {
   return (
-    <article className={styles.row}>
-      <div className={styles.id}>{order.id}</div>
-      <div className={styles.name}>{order.name}</div>
-      <div className={styles.address}>{order.address}</div>
-      <div className={styles.date}>{order.date}</div>
-      <div className={styles.viewOrder}>
-        <Link
-          to="/checkout"
-          state={{ products: order.products, subtotal: order.subtotal }}
-          className={styles.viewLink}
-        >
-          View
-        </Link>
-      </div>
-      <div className={styles.status}>
-        {isEditing ? (
-          // Hiển thị dropdown khi đang chỉnh sửa
-          <select
-            value={order.status}
-            onChange={handleStatusChange}
-            className={styles.statusSelect}
-            onBlur={() => setIsEditing(false)} // Ẩn dropdown khi mất focus
-          >
-            <option value="Completed">Completed</option>
-            <option value="Processing">Processing</option>
-            <option value="Canceled">Canceled</option>
-          </select>
-        ) : (
-          // Hiển thị badge khi không chỉnh sửa
-          <div
-            className={`${styles.statusBadge} ${styles[order.status.toLowerCase()]}`}
-            onClick={() => setIsEditing(true)} // Hiển thị dropdown khi nhấn vào badge
-          >
-            {order.status}
-            <img src={arrowdown} alt="Arrow Down" className={styles.arrowIcon} />
-          </div>
+    <div className={styles.orderDetailModal}>
+      <div className={styles.orderDetailContent}>
+        <button className={styles.closeButton} onClick={onClose}>×</button>
+        <h2>Order Detail</h2>
+        <div><b>Customer:</b> {order.name}</div>
+        <div><b>Phone:</b> {order.phone}</div>
+        <div><b>Address:</b> {order.shipping_address}</div>
+        <div><b>Status:</b> {order.status}</div>
+        <div><b>Total:</b> ${order.total_amount?.toLocaleString()}</div>
+        <div><b>Created At:</b> {order.createdAt ? new Date(order.createdAt).toLocaleString() : ''}</div>
+        {order.status === 'delivered' && (
+          <div><b>Delivered At:</b> {order.updatedAt ? new Date(order.updatedAt).toLocaleString() : ''}</div>
         )}
+        <h3>Products</h3>
+        <div className={styles.productList}>
+          {order.items?.map((item, idx) => (
+            <div key={idx} className={styles.productRow}>
+              <span>{item.product?.name || item.product_id}</span>
+              <span>Qty: {item.quantity}</span>
+              <span>Price: ${item.price?.toLocaleString()}</span>
+            </div>
+          ))}
+        </div>
       </div>
-    </article>
+    </div>
+  );
+}
+
+function StatusDropdown({ value, onChange }) {
+  return (
+    <select
+      className={styles.statusDropdown}
+      value={value}
+      onChange={e => onChange(e.target.value)}
+    >
+      {STATUS_OPTIONS.map(opt => (
+        <option key={opt} value={opt}>{opt.charAt(0).toUpperCase() + opt.slice(1)}</option>
+      ))}
+    </select>
   );
 }
 
 function OrderTable() {
-  const [orders, setOrders] = useState([
-    {
-      id: "OD0001",
-      name: "Anh Minh",
-      address: "123 Hoan Kiem, Hanoi",
-      date: "02 Feb 2024",
-      products: [
-        { id: 1, name: "Canon EOS 90D", price: 690, quantity: 1, image: "/path/to/image1.jpg" },
-        { id: 2, name: "Sony Alpha a7 III", price: 2000, quantity: 1, image: "/path/to/image2.jpg" },
-      ],
-      subtotal: 2690,
-      status: "Completed",
-    },
-    {
-      id: "OD0002",
-      name: "Anh Minh",
-      address: "123 Hoan Kiem, Hanoi",
-      date: "02 Feb 2024",
-      products: [
-        { id: 3, name: "Nikon D750", price: 1200, quantity: 1, image: "/path/to/image3.jpg" },
-      ],
-      subtotal: 1200,
-      status: "Processing",
-    },
-  ]);
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [sortField, setSortField] = useState('createdAt');
+  const [sortOrder, setSortOrder] = useState('desc');
+  const [selectedOrder, setSelectedOrder] = useState(null);
 
-  // Hàm xử lý thay đổi trạng thái
-  const handleStatusChange = (orderId, newStatus) => {
-    setOrders((prevOrders) =>
-      prevOrders.map((order) =>
-        order.id === orderId ? { ...order, status: newStatus } : order
-      )
-    );
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        const response = await orderApi.getOrders();
+        const ordersData = response.data?.result?.orders || [];
+        setOrders(Array.isArray(ordersData) ? ordersData : []);
+        setLoading(false);
+      } catch (err) {
+        setError('Failed to fetch orders');
+        setOrders([]);
+        setLoading(false);
+      }
+    };
+    fetchOrders();
+  }, []);
+
+  const handleSort = (field) => {
+    if (sortField === field) {
+      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+    } else {
+      setSortField(field);
+      setSortOrder('asc');
+    }
   };
+
+  const handleStatusChange = async (orderId, newStatus) => {
+    try {
+      await orderApi.updateOrderStatus(orderId, newStatus);
+      setOrders(prev => prev.map(order => order._id === orderId ? { ...order, status: newStatus } : order));
+    } catch (err) {
+      alert('Failed to update order status');
+    }
+  };
+
+  const sortedOrders = [...orders].sort((a, b) => {
+    if (sortField === 'createdAt' || sortField === 'updatedAt') {
+      const dateA = new Date(a[sortField] || a.createdAt);
+      const dateB = new Date(b[sortField] || b.createdAt);
+      return sortOrder === 'asc' ? dateA - dateB : dateB - dateA;
+    }
+    if (sortField === 'status') {
+      return sortOrder === 'asc'
+        ? (a.status || '').localeCompare(b.status || '')
+        : (b.status || '').localeCompare(a.status || '');
+    }
+    return 0;
+  });
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>{error}</div>;
+  if (!orders || orders.length === 0) return <div>No orders found</div>;
 
   return (
     <section className={styles.tableContainer}>
       <header className={styles.tableHeader}>
-        <div>ID</div>
-        <div>Name</div>
-        <div>Address</div>
-        <div>Date</div>
-        <div>View Order</div>
-        <div>Status</div>
+        <div onClick={() => handleSort('createdAt')} className={styles.sortable}>
+          Created At <img src={sortIcon} alt="sort" className={styles.sortIcon} />
+        </div>
+        <div>Customer Name</div>
+        <div>Total Amount</div>
+        <div onClick={() => handleSort('status')} className={styles.sortable}>
+          Status <img src={sortIcon} alt="sort" className={styles.sortIcon} />
+        </div>
+        <div>Delivered At</div>
       </header>
       <div>
-        {orders.map((order) => (
-          <OrderRow key={order.id} order={order} onStatusChange={handleStatusChange} />
+        {sortedOrders.map((order) => (
+          <div
+            key={order._id}
+            className={styles.tableRow}
+            onClick={e => { if (e.target.tagName !== 'SELECT') setSelectedOrder(order); }}
+            style={{ cursor: 'pointer' }}
+          >
+            <div>{order.createdAt ? new Date(order.createdAt).toLocaleString() : ''}</div>
+            <div>{order.name}</div>
+            <div>${order.total_amount?.toLocaleString()}</div>
+            <div>
+              <StatusDropdown value={order.status} onChange={status => handleStatusChange(order._id, status)} />
+            </div>
+            <div>{order.status === 'delivered' ? (order.updatedAt ? new Date(order.updatedAt).toLocaleString() : '') : ''}</div>
+          </div>
         ))}
       </div>
+      {selectedOrder && <OrderDetail order={selectedOrder} onClose={() => setSelectedOrder(null)} />}
     </section>
   );
 }
