@@ -24,7 +24,7 @@ export const getProfileController = async (req: Request, res: Response) => {
 
 export const updateUserAddressController = async (req: Request, res: Response) => {
     const user_id = req.decoded_authorization?.user_id as string
-    const { address, phone } = req.body
+    const { address, phone, name } = req.body
 
     if (!address || typeof address !== 'string') {
         res.status(400).json({
@@ -40,9 +40,14 @@ export const updateUserAddressController = async (req: Request, res: Response) =
         return
     }
 
-    const user = await usersService.updateUserAddress(user_id, { address, phone })
+    const updateFields: any = { address, phone };
+    if (name && typeof name === 'string') {
+        updateFields.name = name;
+    }
+
+    const user = await usersService.updateUserFields(user_id, updateFields)
     res.json({
-        message: 'User address and phone updated successfully',
+        message: 'User info updated successfully',
         result: user
     })
 }

@@ -126,27 +126,44 @@
 .quantitySelector {
   display: flex;
   align-items: center;
-  gap: 10px;
+  border: 1px solid #bbb;
+  border-radius: 8px;
+  overflow: hidden;
+  width: 140px;
+  height: 38px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.03);
 }
 
 .quantityButton {
-  width: 30px;
-  height: 30px;
-  border: 1px solid #000;
-  border-radius: 5px;
+  width: 38px;
+  height: 38px;
+  border: none;
   background: none;
   cursor: pointer;
-  display: flex; 
+  font-size: 20px;
+  transition: background 0.2s;
+  display: flex;
   align-items: center;
-  justify-content: center; 
-  font-size: 18px;
+  justify-content: center;
 }
 
-.quantityValue {
-  font-family: Roboto;
-  font-size: 18px;
-  min-width: 30px;
+.quantityButton:hover:not(:disabled) {
+  background: #f0f0f0;
+}
+
+.quantityButton:disabled {
+  color: #bbb;
+}
+
+.quantityInput {
+  width: 44px;
+  height: 38px;
+  border: none;
   text-align: center;
+  font-size: 18px;
+  outline: none;
+  background: transparent;
+  font-family: Roboto, sans-serif;
 }
 
 .orderSummary {
@@ -209,4 +226,12 @@
   font-family: Roboto;
   font-size: 16px;
   cursor: pointer;
+}
+
+.productTotalPrice {
+  color: #28a745 !important;
+  font-family: Roboto, sans-serif !important; 
+  font-size: 18px !important; 
+  font-weight: bold !important; 
+  text-align: center; 
 }

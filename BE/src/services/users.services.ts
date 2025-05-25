@@ -157,6 +157,17 @@ class UsersService {
     async updateRole(user_id: string, reqBody: UpdateRoleRequestBody) {
         return await databaseService.users.updateOne({ _id: new ObjectId(user_id) }, { $set: { role: reqBody.role } })
     }
+
+    async updateUserFields(user_id: string, fields: any) {
+        const user = await databaseService.users.findOne({ _id: new ObjectId(user_id) })
+        if (!user) {
+            throw new Error('User not found')
+        }
+        return await databaseService.users.updateOne(
+            { _id: new ObjectId(user_id) },
+            { $set: fields }
+        )
+    }
 }
 
 const usersService = new UsersService()

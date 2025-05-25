@@ -2,8 +2,8 @@ import React from "react";
 import styles from "./ShoppingCart.module.css";
 
 function OrderSummary({ subtotal, handleCheckout }) {
-  const shipping = subtotal > 0 ? 10 : 0; // Free shipping logic
-  const total = subtotal + shipping;
+  const shipping = 0; // Always free
+  const total = subtotal;
 
   return (
     <div className={styles.orderSummary}>
@@ -15,7 +15,7 @@ function OrderSummary({ subtotal, handleCheckout }) {
         </div>
         <div className={styles.summaryItem}>
           <span>Shipping</span>
-          <span>{shipping === 0 ? "Free" : `$${shipping.toFixed(2)}`}</span>
+          <span>Free</span>
         </div>
         <div className={styles.summaryTotal}>
           <span>Total</span>

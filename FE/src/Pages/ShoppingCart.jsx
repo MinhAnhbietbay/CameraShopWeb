@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import OrderSummary from "./OrderSummary";
 import styles from "./ShoppingCart.module.css";
@@ -7,7 +7,7 @@ import image from "../assets/images/Sa7.png";
 import image1 from "../assets/images/C90d.jpg";
 
 // Component QuantitySelector
-function QuantitySelector({ quantity, onQuantityChange }) {
+function QuantitySelector({ quantity, onQuantityChange, max }) {
   const decreaseQuantity = () => {
     if (quantity > 1) {
       onQuantityChange(quantity - 1);
@@ -15,7 +15,19 @@ function QuantitySelector({ quantity, onQuantityChange }) {
   };
 
   const increaseQuantity = () => {
-    onQuantityChange(quantity + 1);
+    if (quantity < max) {
+      onQuantityChange(quantity + 1);
+    }
+  };
+
+  const handleInputChange = (e) => {
+    let value = e.target.value;
+    if (value === "") {
+      onQuantityChange(1);
+      return;
+    }
+    value = Math.max(1, Math.min(Number(value), max));
+    onQuantityChange(value);
   };
 
   return (
@@ -27,11 +39,20 @@ function QuantitySelector({ quantity, onQuantityChange }) {
       >
         -
       </button>
-      <div className={styles.quantityValue}>{quantity}</div>
+      <input
+        type="number"
+        className={styles.quantityInput}
+        value={quantity}
+        min={1}
+        max={max}
+        onChange={handleInputChange}
+        style={{ width: 50, textAlign: "center" }}
+      />
       <button
         className={styles.quantityButton}
         onClick={increaseQuantity}
         aria-label="Increase quantity"
+        disabled={quantity >= max}
       >
         +
       </button>
@@ -45,19 +66,20 @@ function ProductItem({ product, onRemove, updateQuantity }) {
     <div className={styles.productItem}>
       <div className={styles.productDetails}>
         <div className={styles.productImageContainer}>
-          <img src={product.image} alt={product.altText} className={styles.productImage} />
+          <img src={product.image} alt={product.name} className={styles.productImage} />
         </div>
         <div className={styles.productName}>{product.name}</div>
       </div>
-      <div className={styles.productPrice}>${product.price.toFixed(2)}</div>
+      <div className={styles.productPrice}>${Number(product.price).toFixed(2)}</div>
       <QuantitySelector
         quantity={product.quantity}
-        onQuantityChange={(newQty) => updateQuantity(product.id, newQty)}
+        onQuantityChange={(newQty) => updateQuantity(product._id, newQty, product.count_in_stock)}
+        max={product.count_in_stock || 99}
       />
       <div className={styles.productTotalPrice}>
         ${(product.price * product.quantity).toFixed(2)}
       </div>
-      <button className={styles.removeButton} onClick={() => onRemove(product.id)}>
+      <button className={styles.removeButton} onClick={() => onRemove(product._id)}>
         Remove
       </button>
     </div>
@@ -66,35 +88,27 @@ function ProductItem({ product, onRemove, updateQuantity }) {
 
 // ShoppingCart Component
 function ShoppingCart() {
-  const [products, setProducts] = useState([
-    {
-      id: 1,
-      name: "Canon EOS 90D (Body Only)",
-      price: 699.99,
-      quantity: 1,
-      image: image1,
-      altText: "Canon Camera",
-    },
-    {
-      id: 4,
-      name: "Sony a7 III Mirrorless",
-      price: 700,
-      quantity: 1,
-      image: image,
-      altText: "Sony Camera",
-    },
-  ]);
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    setProducts(cart);
+  }, []);
 
   const handleRemoveProduct = (productId) => {
-    setProducts(products.filter((product) => product.id !== productId));
+    const newProducts = products.filter((product) => product._id !== productId);
+    setProducts(newProducts);
+    localStorage.setItem('cart', JSON.stringify(newProducts));
   };
 
-  const updateQuantity = (productId, newQuantity) => {
-    setProducts(
-      products.map((product) =>
-        product.id === productId ? { ...product, quantity: newQuantity } : product
-      )
+  const updateQuantity = (productId, newQuantity, max) => {
+    const updatedProducts = products.map((product) =>
+      product._id === productId
+        ? { ...product, quantity: Math.max(1, Math.min(newQuantity, product.count_in_stock || max || 99)) }
+        : product
     );
+    setProducts(updatedProducts);
+    localStorage.setItem('cart', JSON.stringify(updatedProducts));
   };
 
   const navigate = useNavigate();
@@ -105,9 +119,8 @@ function ShoppingCart() {
   );
 
   const handleCheckout = () => {
-    navigate("/checkout", { state: { products, subtotal } }); // Truyền products và subtotal qua state
+    navigate("/checkout", { state: { products, subtotal } });
   };
-
 
   return (
     <main className={styles.cartContainer}>
@@ -125,7 +138,7 @@ function ShoppingCart() {
           {products.length > 0 ? (
             products.map((product) => (
               <ProductItem
-                key={product.id}
+                key={product._id}
                 product={product}
                 onRemove={handleRemoveProduct}
                 updateQuantity={updateQuantity}
@@ -135,8 +148,6 @@ function ShoppingCart() {
             <p className={styles.emptyCartMessage}>Your cart is empty.</p>
           )}
         </div>
-        
-
         <OrderSummary subtotal={subtotal} handleCheckout={handleCheckout} />
       </section>
     </main>

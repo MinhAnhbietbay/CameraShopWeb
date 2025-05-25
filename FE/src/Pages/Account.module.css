@@ -2,10 +2,10 @@
     background-color: #f0f0f0;
     max-width: none;
     min-height: 100vh;
-    margin-left: auto;
-    margin-right: auto;
+    margin-right: 100px;
     padding: 1px 80px;
     font-family: Roboto, sans-serif;
+    margin-left: 40px;
 }
 .sidebarTitle {
     margin-top: -20px;
@@ -14,8 +14,8 @@
 }
 
 .dashboardContent {
-    margin-top: -300px;
-    margin-left: 260px;
+    margin-top: -280px;
+    margin-left: 280px;
 }
 
 .dashboardTitle {
@@ -64,7 +64,54 @@
     line-height: 25px;
 }
 
-.link {
-    color: #32ade6;
-    text-decoration: underline;
+.editText {
+  color: #32ade6;
+  text-decoration: underline;
+  font-size: 18px;
+  font-weight: 500;
+  cursor: pointer;
+  margin-left: 12px;
+  margin-top: -20px;
+}
+
+.infoRow {
+  display: flex;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.infoLabel {
+  min-width: 90px;
+  font-weight: 500;
+  font-size: 17px;
+  margin-right: 24px;
+}
+
+.infoValue {
+  font-size: 17px;
+  color: #222;
+}
+
+.infoInputLarge {
+  font-size: 18px;
+  padding: 8px 16px;
+  border: 2px solid #32ade6;
+  border-radius: 8px;
+  outline: none;
+  width: 320px;
+  margin-left: 0;
+  background: #f8faff;
+  transition: border 0.2s;
+}
+
+.saveButton {
+  margin-top: 10px;
+  background: #32ade6;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 24px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
 }
